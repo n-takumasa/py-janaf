@@ -38,10 +38,19 @@ class Table:
         return self.raw.split("\n", 1)[0].split("\t", 1)[1]
 
     @cached_property
+    def stripcomment(self):
+        return "\n".join(
+            line for line in self.raw.splitlines()[1:] if line[0] not in {"+", "H"}
+        )
+
+    @cached_property
     def df(self):
         df = (
             pd.read_csv(
-                io.StringIO(self.raw), sep="\t+", header=0, skiprows=1, engine="python"
+                io.StringIO(self.stripcomment),
+                sep="\t+",
+                header=0,
+                engine="python",
             )
             .replace("INFINITE", float("inf"))
             .astype(float, errors="ignore")
