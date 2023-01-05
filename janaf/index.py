@@ -28,6 +28,32 @@ def search(
     name: str | None = None,
     phase: str | None = None,
 ):
+    """Search a compound
+
+    Parameters
+    ----------
+    query, optional
+        Arguments for `pandas.DataFrame.query()`, by default None
+        If falsy, `.query()` is not called.
+    formula, optional
+        Regex for `formula`, by default None
+        If falsy, `.match()` is not called.
+    name, optional
+        Regex for `name`, by default None
+        If falsy, `.match()` is not called.
+    phase, optional
+        Regex for `phase`, by default None
+        If falsy, `.match()` is not called.
+
+    Returns
+    -------
+        `janaf.Table`
+
+    Raises
+    ------
+    NotUnique
+        Occurs when search results are not unique
+    """
     df = db().query(query) if query else db()
     result = pd.Series([True] * len(df), dtype=bool)
 
