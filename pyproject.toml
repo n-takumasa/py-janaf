@@ -29,7 +29,7 @@ numpy = "^1.21"
 pytest = "^7.2.0"
 black = "^22.12.0"
 flake8 = "^6.0.0"
-aiohttp = "^3.8.3"
+aiohttp = "^3.8.4"
 aiofiles = "^22.1.0"
 nox = "^2022.11.21"
 
