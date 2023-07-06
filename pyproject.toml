@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "janaf"
-version = "0.0.0"  # using poetry-dynamic-versioning
+version = "0.0.0" # using poetry-dynamic-versioning
 description = ""
 license = "MIT"
 authors = ["Takumasa Nakamura <n.takumasa@gmail.com>"]
@@ -10,9 +10,7 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Chemistry",
     "Topic :: Scientific/Engineering :: Physics",
 ]
-packages = [
-    { include = "janaf" },
-]
+packages = [{ include = "janaf" }]
 
 [tool.poetry-dynamic-versioning]
 enable = true
@@ -21,20 +19,20 @@ style = "semver"
 
 [tool.poetry.dependencies]
 python = ">=3.8.1,<3.12"
-pandas = "^1.3.5"
+pandas = ">=1.3.5,<2.1"
 numpy = "^1.21"
 
 
 [tool.poetry.group.dev.dependencies]
-pytest = "^7.2.0"
-black = "^22.12.0"
-flake8 = "^6.0.0"
-aiohttp = "^3.8.3"
-aiofiles = "^22.1.0"
-nox = "^2022.11.21"
+pytest = "*"
+black = "*"
+flake8 = "*"
+aiohttp = "*"
+aiofiles = "*"
+nox = "*"
 
 [tool.black]
-target-version = ['py310']
+target-version = ['py311']
 line-length = 88
 
 [build-system]
