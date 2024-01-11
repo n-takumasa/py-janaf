@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import pandas as pd
+import polars as pl
 
 from .index import search
 from .table import Table
@@ -13,7 +13,8 @@ def __getattr__(name):
 
     if name == "db":
         return db()
-    raise AttributeError(f"module '{__name__}' has no attribute '{name}'")
+    msg = f"module '{__name__}' has no attribute '{name}'"
+    raise AttributeError(msg)
 
 
-db: pd.DataFrame
+db: pl.DataFrame
