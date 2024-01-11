@@ -42,7 +42,3 @@ def test_columns(index: str):
         pl.Float64,
         pl.String,
     ]
-
-
-# def test_monotonic(table: janaf.Table):
-#     ...
