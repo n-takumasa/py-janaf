@@ -18,8 +18,8 @@ vcs = "git"
 style = "semver"
 
 [tool.poetry.dependencies]
-python = ">=3.8.1,<4.0"
-numpy = ">=1.21"
+python = ">=3.9,<3.13"
+numpy = ">=1.25"
 polars = {extras = ["pandas"], version = "^0.20.3"}
 
 
