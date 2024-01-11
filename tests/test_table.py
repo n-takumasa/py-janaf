@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+import json
+
 import polars as pl
 import pytest
 
@@ -9,7 +13,8 @@ def table(request: pytest.FixtureRequest):
     return janaf.Table(request.param)
 
 
-db_indexes = janaf.db.get_column("index").to_list()
+with open("janaf/janaf.json", "rb") as f:
+    db_indexes: list[str] = json.load(f)["index"]
 
 
 @pytest.mark.parametrize("index", db_indexes)
