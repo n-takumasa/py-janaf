@@ -47,34 +47,34 @@ class Table:
     index: str
 
     @cached_property
-    def fname(self):
+    def fname(self) -> Path:
         return Path(__file__).parent / f"data/{self.index}.txt"
 
     @cached_property
-    def raw(self):
+    def raw(self) -> str:
         with open(self.fname, encoding="utf-8") as f:
             return f.read()
 
     @cached_property
-    def header(self):
+    def header(self) -> list[str]:
         return self.raw.split("\n", 1)[0].split("\t", 1)
 
     @cached_property
-    def name(self):
+    def name(self) -> str:
         return self.header[0]
 
     @cached_property
-    def formula(self):
+    def formula(self) -> str:
         return self.header[1]
 
     @cached_property
-    def body(self):
+    def body(self) -> str:
         return "\n".join(
             line for line in self.raw.splitlines()[1:] if line[0] not in {"+", "H"}
         )
 
     @cached_property
-    def df(self):
+    def df(self) -> pl.DataFrame:
         is_note = pl.col("delta-f H").str.contains(
             "<-->|TRANSITION|PRESSURE|FUGACITY|Cp|UNDEFINED"
         )
