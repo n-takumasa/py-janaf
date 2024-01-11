@@ -4,10 +4,18 @@ import pytest
 import janaf
 
 
-@pytest.mark.parametrize("i", janaf.db.get_column("index").to_list())
-def test_runall(i):
-    t = janaf.Table(i)
-    assert t.df.columns == [
+@pytest.fixture()
+def table(request: pytest.FixtureRequest):
+    return janaf.Table(request.param)
+
+
+db_indexes = janaf.db.get_column("index").to_list()
+
+
+@pytest.mark.parametrize("index", db_indexes)
+def test_columns(index: str):
+    table = janaf.Table(index)
+    assert table.df.columns == [
         "T(K)",
         "Cp",
         "S",
@@ -18,7 +26,7 @@ def test_runall(i):
         "log Kf",
         "Note",
     ]
-    assert t.df.dtypes == [
+    assert table.df.dtypes == [
         pl.Float64,
         pl.Float64,
         pl.Float64,
@@ -29,3 +37,7 @@ def test_runall(i):
         pl.Float64,
         pl.String,
     ]
+
+
+# def test_monotonic(table: janaf.Table):
+#     ...
