@@ -18,6 +18,7 @@ pip install git+https://github.com/n-takumasa/py-janaf
 ```
 
 ```py
+>>> import polars as pl
 >>> import janaf
 >>> table = janaf.search(formula="CO2$")
 >>> table.name
