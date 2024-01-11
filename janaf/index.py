@@ -14,7 +14,11 @@ def db() -> pl.DataFrame:
         pl.read_json(Path(__file__).parent / "janaf.json")
         .explode("*")
         .with_columns(
-            pl.col("display").str.extract_groups(r"^(?P<formula>[^,]+), (?P<name>.+) \((?P<phase>[^)]+)\)$").alias("_")
+            pl.col("display")
+            .str.extract_groups(
+                r"^(?P<formula>[^,]+), (?P<name>.+) \((?P<phase>[^)]+)\)$"
+            )
+            .alias("_")
         )
         .unnest("_")
     )
@@ -53,7 +57,9 @@ def search(
 
     expr = pl.lit(True)  # noqa: FBT003
     if formula:
-        expr &= pl.col("formula").str.contains(formula if formula[0] == "^" else f"^{formula}")
+        expr &= pl.col("formula").str.contains(
+            formula if formula[0] == "^" else f"^{formula}"
+        )
     if name:
         expr &= pl.col("name").str.contains(name if name[0] == "^" else f"^{name}")
     if phase:
