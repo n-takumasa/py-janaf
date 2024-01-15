@@ -40,6 +40,9 @@ jobs:
       - name: install nox-poetry
         run: |
           pip install nox-poetry
+      - name: Install dependencies
+        run: |
+          poetry install
       - name: Run nox
         run: |
           nox --session=${{ matrix.session }} --python=${{ matrix.python }}
