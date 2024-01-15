@@ -1,4 +1,6 @@
 # py-janaf: Python wrapper for NIST-JANAF Thermochemical Tables
+[![pypi version](https://img.shields.io/pypi/v/janaf.svg)](https://pypi.python.org/project/janaf/)
+[![Python Versions](https://img.shields.io/pypi/pyversions/janaf.svg)](https://pypi.org/project/janaf/)
 
 ## Features
 
@@ -14,7 +16,7 @@
 ## Usage
 
 ```
-pip install git+https://github.com/n-takumasa/py-janaf
+pip install janaf
 ```
 
 ```py
