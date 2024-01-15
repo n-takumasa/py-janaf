@@ -10,7 +10,7 @@ import polars as pl
 import polars.selectors as cs
 
 
-def _sign(x: str | float) -> int:
+def _sign(x: str | float) -> int:  # pragma: no cover
     if isinstance(x, str):
         return -1 if x[0] == "-" else 1
     return np.sign(x)
