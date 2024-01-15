@@ -39,7 +39,7 @@ jobs:
           pipx install nox
       - name: install nox-poetry
         run: |
-          pipx inject poetry poetry-dynamic-versioning[plugin]
+          pip install nox-poetry
       - name: Install dependencies
         run: |
           poetry install
