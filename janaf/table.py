@@ -19,7 +19,7 @@ def _sign(x: str | float) -> int:  # pragma: no cover
 def _fix_delta_f_H(df: pl.DataFrame) -> pl.DataFrame:
     df_fixed = (
         df.select(
-            "row_nr",
+            "index",
             pl.col("delta-f H", "delta-f G", "log Kf")
             .map_elements(_sign)
             .fill_null(strategy="backward")
@@ -31,7 +31,7 @@ def _fix_delta_f_H(df: pl.DataFrame) -> pl.DataFrame:
         )
         .unnest("caps")
         .select(
-            "row_nr",
+            "index",
             pl.col("delta-f H") * pl.col("1").cast(pl.Float64),
             pl.col("delta-f G") * pl.col("2").cast(pl.Float64),
             pl.col("log Kf") * pl.col("3").cast(pl.Float64),
@@ -39,7 +39,7 @@ def _fix_delta_f_H(df: pl.DataFrame) -> pl.DataFrame:
         .drop_nulls()
     )
 
-    return df.update(df_fixed, on="row_nr")
+    return df.update(df_fixed, on="index")
 
 
 @dataclass(frozen=True)
@@ -96,7 +96,7 @@ class Table:
                 truncate_ragged_lines=True,
             )
             .sort("T(K)")
-            .with_row_count(name="row_nr")
+            .with_row_index(name="index")
             .with_columns(
                 pl.when(is_note)
                 .then(None)
@@ -110,5 +110,5 @@ class Table:
                 .str.replace_all("INFINITE", "+inf")
                 .cast(pl.Float64)
             )
-            .drop("row_nr")
+            .drop("index")
         )

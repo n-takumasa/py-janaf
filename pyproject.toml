@@ -22,7 +22,7 @@ enable = true
 [tool.poetry.dependencies]
 python = ">=3.9,<3.13"
 numpy = ">=1.25"
-polars = {extras = ["pandas"], version = ">=0.20.3"}
+polars = {extras = ["pandas"], version = ">=0.20.4"}
 
 [tool.poetry.group.dev.dependencies]
 pytest = "*"
