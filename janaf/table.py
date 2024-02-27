@@ -5,15 +5,8 @@ from dataclasses import dataclass
 from functools import cached_property
 from pathlib import Path
 
-import numpy as np
 import polars as pl
 import polars.selectors as cs
-
-
-def _sign(x: str | float) -> int:  # pragma: no cover
-    if isinstance(x, str):
-        return -1 if x[0] == "-" else 1
-    return np.sign(x)
 
 
 def _fix_delta_f_H(df: pl.DataFrame) -> pl.DataFrame:
@@ -21,7 +14,9 @@ def _fix_delta_f_H(df: pl.DataFrame) -> pl.DataFrame:
         df.select(
             "index",
             pl.col("delta-f H", "delta-f G", "log Kf")
-            .map_elements(_sign)
+            .cast(pl.String)
+            .str.slice(0, 1)
+            .replace("-", -1, default=1)
             .fill_null(strategy="backward")
             .shift(-1),
             #
