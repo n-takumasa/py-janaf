@@ -37,6 +37,12 @@ packages = ["janaf"]
 [[tool.hatch.envs.test.matrix]]
 python = ["3.7", "3.8", "3.9", "3.10", "3.11", "3.12"]
 
+[tool.hatch.envs.dev]
+dependencies = [
+  "aiofiles",
+  "aiohttp",
+]
+
 [tool.ruff]
 target-version = "py38"
 line-length = 88
@@ -62,4 +68,10 @@ ignore = [
 "**/tests/**/*.py" = [
   "S101",    # flake8-bandit: assert
   "PLR2004", # magic-value-comparison
+]
+"**/example/**/*.py" = [
+  "INP001",  # implicit-namespace-package
+]
+"**/script/**/*.py" = [
+  "INP001",  # implicit-namespace-package
 ]

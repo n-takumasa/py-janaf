@@ -8,7 +8,7 @@ import pytest
 import janaf
 
 
-@pytest.fixture()
+@pytest.fixture
 def table(request: pytest.FixtureRequest):
     return janaf.Table(request.param)
 
