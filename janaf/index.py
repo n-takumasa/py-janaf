@@ -5,7 +5,7 @@ from pathlib import Path
 
 import polars as pl
 
-from .table import Table
+from janaf.table import Table
 
 
 @lru_cache(maxsize=None)

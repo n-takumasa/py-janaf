@@ -3,6 +3,7 @@ from __future__ import annotations
 import asyncio
 from pathlib import Path
 
+import aiofiles
 import aiohttp
 
 url = "https://janaf.nist.gov/dat/janaf.json"
@@ -11,11 +12,10 @@ dst = root / "janaf/janaf.json"
 
 
 async def main():
-    async with aiohttp.ClientSession() as session:
-        async with session.get(url) as res:
-            text = await res.text("utf-8")
-            with open(dst, "w", encoding="utf-8") as f:
-                f.write(text)
+    async with aiohttp.ClientSession() as session, session.get(url) as res:
+        text = await res.text("utf-8")
+        async with aiofiles.open(dst, "w", encoding="utf-8") as f:
+            await f.write(text)
 
 
 if __name__ == "__main__":

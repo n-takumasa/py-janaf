@@ -9,7 +9,7 @@ import polars as pl
 import polars.selectors as cs
 
 
-def _fix_delta_f_H(df: pl.DataFrame) -> pl.DataFrame:
+def _fix_delta_f_H(df: pl.DataFrame) -> pl.DataFrame:  # noqa: N802
     df_fixed = (
         df.select(
             "index",
@@ -78,7 +78,7 @@ class Table:
                 io.StringIO(self.body),
                 has_header=True,
                 separator="\t",
-                dtypes={
+                schema={
                     "T(K)": pl.Float64,
                     "Cp": pl.Float64,
                     "S": pl.Float64,

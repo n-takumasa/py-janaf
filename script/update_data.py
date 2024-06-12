@@ -27,8 +27,8 @@ async def fetch(session: aiohttp.ClientSession, url: str, dst: Path):
 
 
 async def main():
-    with open(path_json, "r", encoding="utf-8") as fp:
-        indexes = json.load(fp)["index"]
+    async with aiofiles.open(path_json, encoding="utf-8") as fp:
+        indexes = json.load(fp.buffer)["index"]
 
     async with aiohttp.ClientSession() as session:
         await asyncio.gather(

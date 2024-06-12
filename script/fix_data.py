@@ -21,7 +21,7 @@ def fix(fp: Path) -> bool:
 def main():
     for fp in Path("janaf/data/").glob("*.txt"):
         if fix(fp):
-            print("Fixed:", fp)
+            pass
 
 
 if __name__ == "__main__":
