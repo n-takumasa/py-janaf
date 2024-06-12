@@ -78,7 +78,7 @@ class Table:
                 io.StringIO(self.body),
                 has_header=True,
                 separator="\t",
-                dtypes={
+                schema={
                     "T(K)": pl.Float64,
                     "Cp": pl.Float64,
                     "S": pl.Float64,

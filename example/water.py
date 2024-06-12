@@ -1,3 +1,11 @@
+# /// script
+# requires-python = ">=3.8"
+# dependencies = [
+#   "janaf",
+#   "matplotlib",
+# ]
+# ///
+
 import matplotlib.pyplot as plt
 import polars as pl
 
