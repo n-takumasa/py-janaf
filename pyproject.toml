@@ -4,6 +4,8 @@ build-backend = "hatchling.build"
 
 [tool.hatch.version]
 source = "vcs"
+[tool.hatch.build.hooks.vcs]
+version-file = "src/janaf/_version.py"
 
 [project]
 name = "janaf"
@@ -38,14 +40,13 @@ exclude = [
   "/.github"
 ]
 
-[tool.hatch.build.targets.wheel]
-packages = ["janaf"]
-
 [[tool.hatch.envs.test.matrix]]
 python = ["3.8", "3.9", "3.10", "3.11", "3.12"]
 
 [tool.hatch.envs.dev]
 dependencies = [
+  "ipython",
+  "pytest",
   "aiofiles",
   "aiohttp",
 ]
@@ -54,31 +55,7 @@ dependencies = [
 target-version = "py38"
 line-length = 88
 
-[tool.ruff.lint]
-select = ["ALL"]
-ignore = [
-  "ANN",     # flake8-annotations
-  "D",       # pydocstyle
-  "FIX",     # flake8-fixme
-  "TD",      # flake8-todos
-  "PTH123",  # flake8-use-pathlib: builtin-open
-  "PLR0913", # too-many-arguments
-  # Conflicting lint rules
-  "W191", "E111", "E114", "E117", "D206", "D300", "Q000", "Q001", "Q002", "Q003",
-  "COM812", "COM819", "ISC001", "ISC002", "E501",
-]
-
-[tool.ruff.lint.per-file-ignores]
-"__init__.py" = [
-  "F401", # Pyflakes: unused-import
-]
-"**/tests/**/*.py" = [
-  "S101",    # flake8-bandit: assert
-  "PLR2004", # magic-value-comparison
-]
+[tool.ruff.lint.extend-per-file-ignores]
 "**/example/**/*.py" = [
-  "INP001",  # implicit-namespace-package
-]
-"**/script/**/*.py" = [
   "INP001",  # implicit-namespace-package
 ]

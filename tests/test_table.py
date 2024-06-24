@@ -13,7 +13,7 @@ def table(request: pytest.FixtureRequest):
     return janaf.Table(request.param)
 
 
-with open("janaf/janaf.json", "rb") as f:
+with open("src/janaf/janaf.json", "rb") as f:
     db_indexes: list[str] = json.load(f)["index"]
 
 

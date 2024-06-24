@@ -13,7 +13,7 @@ import janaf
 
 t = janaf.search(name="Water, 1 Bar")
 
-df = t.df.to_pandas(use_pyarrow_extension_array=True).set_index("T(K)")  # noqa: PD901
+df = t.df.to_pandas(use_pyarrow_extension_array=True).set_index("T(K)")
 
 fig, axes = plt.subplots(4, 2, sharex="col")
 for ax, col in zip(axes.flat, [c for c in df.columns if c not in {"Note"}]):

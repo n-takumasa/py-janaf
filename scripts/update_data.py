@@ -32,7 +32,7 @@ async def main():
 
     async with aiohttp.ClientSession() as session:
         await asyncio.gather(
-            *[fetch(session, url(index), dst(index)) for index in indexes]
+            *[fetch(session, url(index), dst(index)) for index in indexes],
         )
 
 
