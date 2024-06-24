@@ -28,7 +28,7 @@ classifiers = [
   "Topic :: Scientific/Engineering :: Physics",
 ]
 dependencies = [
-  "polars[pandas]>=1.0.0rc1"
+  "polars[pandas]>=1.0.0rc2"
 ]
 dynamic = ["version"]
 
