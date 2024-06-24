@@ -16,7 +16,7 @@ def _fix_delta_f_H(df: pl.DataFrame) -> pl.DataFrame:  # noqa: N802
             pl.col("delta-f H", "delta-f G", "log Kf")
             .cast(pl.String)
             .str.slice(0, 1)
-            .replace("-", -1, default=1)
+            .replace_strict("-", -1, default=1)
             .fill_null(strategy="backward")
             .shift(-1),
             #
