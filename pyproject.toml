@@ -19,11 +19,13 @@ authors = [
 classifiers = [
   "License :: OSI Approved :: MIT License",
   "Operating System :: OS Independent",
+  "Programming Language :: Python",
   "Programming Language :: Python :: 3.8",
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: Implementation :: CPython",
   "Topic :: Scientific/Engineering :: Chemistry",
   "Topic :: Scientific/Engineering :: Physics",
 ]
@@ -44,12 +46,20 @@ exclude = [
 python = ["3.8", "3.9", "3.10", "3.11", "3.12"]
 
 [tool.hatch.envs.dev]
-dependencies = [
+extra-dependencies = [
   "ipython",
   "pytest",
   "aiofiles",
   "aiohttp",
 ]
+
+[tool.hatch.envs.types]
+extra-dependencies = [
+  "mypy",
+  "pytest",
+]
+[tool.hatch.envs.types.scripts]
+check = "mypy --install-types --non-interactive {args:src/janaf tests}"
 
 [tool.ruff]
 target-version = "py38"
