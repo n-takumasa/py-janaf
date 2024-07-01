@@ -45,7 +45,7 @@ exclude = [
 [[tool.hatch.envs.test.matrix]]
 python = ["3.8", "3.9", "3.10", "3.11", "3.12"]
 
-[tool.hatch.envs.dev]
+[tool.hatch.envs.default]
 extra-dependencies = [
   "ipython",
   "pytest",
