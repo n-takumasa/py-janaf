@@ -55,7 +55,7 @@ def search(
         Occurs when search results are not unique
     """
 
-    expr = pl.lit(True)  # noqa: FBT003
+    expr = pl.lit(True)
     if formula:
         expr &= pl.col("formula").str.contains(
             formula if formula[0] == "^" else f"^{formula}"

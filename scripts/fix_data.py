@@ -19,7 +19,7 @@ def fix(fp: Path) -> bool:
 
 
 def main():
-    for fp in Path("janaf/data/").glob("*.txt"):
+    for fp in Path("src/janaf/data/").glob("*.txt"):
         if fix(fp):
             pass
 

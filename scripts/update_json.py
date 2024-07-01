@@ -8,7 +8,7 @@ import aiohttp
 
 url = "https://janaf.nist.gov/dat/janaf.json"
 root = Path(__file__).parent.parent.absolute()
-dst = root / "janaf/janaf.json"
+dst = root / "src/janaf/janaf.json"
 
 
 async def main():

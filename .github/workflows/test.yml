@@ -15,7 +15,23 @@ env:
   FORCE_COLOR: "1"
 
 jobs:
+  check:
+    name: Static analysis
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.12
+      - name: Install Hatch
+        run: pip install --upgrade hatch
+      - name: Run static analysis
+        run: hatch fmt --check
+      - name: Run mypy
+        run: hatch run types:check
+
   run:
+    needs: check
     name: Python ${{ matrix.python-version }} on ${{ startsWith(matrix.os, 'macos-') && 'macOS' || startsWith(matrix.os, 'windows-') && 'Windows' || 'Linux' }}
     runs-on: ${{ matrix.os }}
     strategy:
@@ -26,20 +42,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
-
-    - name: Update pip
-      run: python -m pip install --upgrade pip
-
     - name: Install Hatch
       run: pip install --upgrade hatch
-
-    - name: Run static analysis
-      run: hatch fmt --check
-
     - name: Run tests
       run: hatch test --python ${{ matrix.python-version }} --cover --randomize --parallel --retries 2 --retry-delay 1

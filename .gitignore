@@ -12,3 +12,6 @@ wheels/
 # lock
 .python-version
 requirements*.lock
+
+# hatch-vcs
+src/janaf/_version.py
