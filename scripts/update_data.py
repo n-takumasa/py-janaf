@@ -8,7 +8,7 @@ import aiofiles
 import aiohttp
 
 root = Path(__file__).parent.parent.absolute()
-path_json = root / "janaf/janaf.json"
+path_json = root / "src/janaf/janaf.json"
 
 
 def url(index: str) -> str:
@@ -16,7 +16,7 @@ def url(index: str) -> str:
 
 
 def dst(index: str) -> Path:
-    return root / f"janaf/data/{index}.txt"
+    return root / f"src/janaf/data/{index}.txt"
 
 
 async def fetch(session: aiohttp.ClientSession, url: str, dst: Path):
