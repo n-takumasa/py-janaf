@@ -15,3 +15,6 @@ requirements*.lock
 
 # hatch-vcs
 src/janaf/_version.py
+
+# coverage
+.coverage

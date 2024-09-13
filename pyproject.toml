@@ -2,12 +2,15 @@
 requires = ["hatchling", "hatch-vcs"]
 build-backend = "hatchling.build"
 
-[tool.hatch.version]
-source = "vcs"
-[tool.hatch.build.hooks.vcs]
-version-file = "src/janaf/_version.py"
+[tool.hatch]
+version.source = "vcs"
+build.hooks.vcs.version-file = "src/janaf/_version.py"
+build.targets.sdist.exclude = [
+  "/.github"
+]
 
 [project]
+dynamic = ["version"]
 name = "janaf"
 description = "Python wrapper for NIST-JANAF Thermochemical Tables"
 readme = "README.md"
@@ -29,43 +32,45 @@ classifiers = [
   "Topic :: Scientific/Engineering :: Chemistry",
   "Topic :: Scientific/Engineering :: Physics",
 ]
+urls.Repository = "https://github.com/n-takumasa/py-janaf"
+
 dependencies = [
-  "polars[pandas]>=1.0.0"
-]
-dynamic = ["version"]
-
-[project.urls]
-Repository = "https://github.com/n-takumasa/py-janaf"
-
-[tool.hatch.build.targets.sdist]
-exclude = [
-  "/.github"
+  "polars>=1.0.0",
 ]
 
-[[tool.hatch.envs.test.matrix]]
-python = ["3.8", "3.9", "3.10", "3.11", "3.12"]
-
-[tool.hatch.envs.default]
-extra-dependencies = [
-  "ipython",
-  "pytest",
-  "aiofiles",
-  "aiohttp",
+[project.optional-dependencies]
+test = ["pytest", "pytest-cov", "janaf[example]"]
+script = ["aiofiles", "aiohttp"]
+lint = ["ruff"]
+type = ["mypy[install-types]", "janaf[test,script]"]
+example = [
+  "matplotlib",
+  "pandas >= 1.5.0",  # polars.DataFrame.to_pandas
+  "pyarrow >= 8.0.0",  # polars.DataFrame.to_pandas
+]
+dev = [
+  "janaf[test,script,lint,type,example]",
+  "tox",
+  "tox-uv",
 ]
 
-[tool.hatch.envs.types]
-extra-dependencies = [
-  "mypy",
-  "pytest",
+[tool.uv]
+managed = false
+dev-dependencies = [
+  "janaf[dev]",
 ]
-[tool.hatch.envs.types.scripts]
-check = "mypy --install-types --non-interactive {args:src/janaf tests}"
 
 [tool.ruff]
 target-version = "py38"
 line-length = 88
 
-[tool.ruff.lint.extend-per-file-ignores]
-"**/example/**/*.py" = [
-  "INP001",  # implicit-namespace-package
+[tool.coverage]
+run.source_pkgs = ["janaf", "tests"]
+run.branch = true
+run.parallel = true
+report.exclude_lines = [
+  "no cov",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+  "@overload",
 ]

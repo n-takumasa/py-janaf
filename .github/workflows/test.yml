@@ -22,13 +22,16 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: 3.12
-      - name: Install Hatch
-        run: pip install --upgrade hatch
+          python-version-file: "pyproject.toml"
+      - name: Install uv
+        uses: astral-sh/setup-uv@v2
+      - run: uv venv
+      - name: Install tox
+        run: uv pip install tox tox-uv
       - name: Run static analysis
-        run: hatch fmt --check
+        run: uv run tox run -e lint
       - name: Run mypy
-        run: hatch run types:check
+        run: uv run tox run -e type
 
   run:
     needs: check
@@ -37,16 +40,24 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-        python-version: ['3.8', '3.9', '3.10', '3.11', '3.12']
+        os: [ubuntu-latest]
+        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
+        include:
+          - os: windows-latest
+            python-version: 3.12
+          - os: macos-latest
+            python-version: 3.12
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v5
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install Hatch
-      run: pip install --upgrade hatch
-    - name: Run tests
-      run: hatch test --python ${{ matrix.python-version }} --cover --randomize --parallel --retries 2 --retry-delay 1
+      - uses: actions/checkout@v4
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install uv
+        uses: astral-sh/setup-uv@v2
+      - run: uv venv
+      - name: Install tox
+        run: uv pip install tox tox-uv tox-gh-actions
+      - name: Run tests
+        run: uv run tox

@@ -8,16 +8,12 @@ import pytest
 import janaf
 
 
-@pytest.fixture
-def table(request: pytest.FixtureRequest):
-    return janaf.Table(request.param)
+def get_index() -> list[str]:
+    with open("src/janaf/janaf.json", "rb") as f:
+        return json.load(f)["index"]
 
 
-with open("src/janaf/janaf.json", "rb") as f:
-    db_indexes: list[str] = json.load(f)["index"]
-
-
-@pytest.mark.parametrize("index", db_indexes)
+@pytest.mark.parametrize("index", get_index())
 def test_columns(index: str):
     table = janaf.Table(index)
     assert table.df.columns == [
