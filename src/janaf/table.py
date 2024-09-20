@@ -6,35 +6,6 @@ from functools import cached_property
 from pathlib import Path
 
 import polars as pl
-import polars.selectors as cs
-
-
-def _fix_delta_f_H(df: pl.DataFrame) -> pl.DataFrame:  # noqa: N802
-    df_fixed = (
-        df.select(
-            "index",
-            pl.col("delta-f H", "delta-f G", "log Kf")
-            .cast(pl.String)
-            .str.slice(0, 1)
-            .replace_strict("-", -1, default=1)
-            .fill_null(strategy="backward")
-            .shift(-1),
-            #
-            caps=pl.col("delta-f H").str.extract_groups(
-                r"([-.\d]+)\s+([-.\d]+)\s+([-.\d]+)"
-            ),
-        )
-        .unnest("caps")
-        .select(
-            "index",
-            pl.col("delta-f H") * pl.col("1").cast(pl.Float64),
-            pl.col("delta-f G") * pl.col("2").cast(pl.Float64),
-            pl.col("log Kf") * pl.col("3").cast(pl.Float64),
-        )
-        .drop_nulls()
-    )
-
-    return df.update(df_fixed, on="index")
 
 
 @dataclass(frozen=True)
@@ -64,9 +35,7 @@ class Table:
 
     @cached_property
     def body(self) -> str:
-        return "\n".join(
-            line for line in self.raw.splitlines()[1:] if line[0] not in {"+", "H"}
-        )
+        return self.raw.split("\n", 1)[1]
 
     @cached_property
     def df(self) -> pl.DataFrame:
@@ -82,28 +51,21 @@ class Table:
                     "T(K)": pl.Float64,
                     "Cp": pl.Float64,
                     "S": pl.Float64,
-                    "-[G-H(Tr)]/T": pl.String,
+                    "-[G-H(Tr)]/T": pl.Float64,
                     "H-H(Tr)": pl.Float64,
                     "delta-f H": pl.String,
                     "delta-f G": pl.Float64,
-                    "log Kf": pl.String,
+                    "log Kf": pl.Float64,
                 },
                 truncate_ragged_lines=True,
             )
             .sort("T(K)")
-            .with_row_index(name="index")
             .with_columns(
                 pl.when(is_note)
                 .then(None)
                 .otherwise(pl.col("delta-f H"))
+                .cast(pl.Float64)
                 .alias("delta-f H"),
                 Note=pl.when(is_note).then(pl.col("delta-f H")),
             )
-            .pipe(_fix_delta_f_H)
-            .with_columns(
-                (cs.string() - cs.by_name("Note"))
-                .str.replace_all("INFINITE", "+inf")
-                .cast(pl.Float64)
-            )
-            .drop("index")
         )
