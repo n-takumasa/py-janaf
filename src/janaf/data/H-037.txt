@@ -1,6 +1,6 @@
 Sodium Hydroxide, Ion (NaOH+)	H1Na1O1+(g)
 T(K)	Cp	S	-[G-H(Tr)]/T	H-H(Tr)	delta-f H	delta-f G	log Kf
-0	0.	0.	INFINITE	-11.693	674.940				
+0	0.	0.	+inf	-11.693	674.940				
 100	34.226	196.325	283.048	-8.672						
 200	44.889	223.761	247.019	-4.652						
 250	47.591	234.091	243.429	-2.334						

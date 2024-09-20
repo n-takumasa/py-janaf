@@ -1,6 +1,6 @@
 Aluminum Chloride, Ion (AlCl2-)	Al1Cl2-(g)
 T(K)	Cp	S	-[G-H(Tr)]/T	H-H(Tr)	delta-f H	delta-f G	log Kf
-0	0.	0.	INFINITE	-12.969	-474.211				
+0	0.	0.	+inf	-12.969	-474.211				
 100	39.846	235.193	329.316	-9.412						
 200	48.255	265.583	290.476	-4.979						
 250	50.901	276.654	286.636	-2.496						
