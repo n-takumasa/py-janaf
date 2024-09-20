@@ -19,14 +19,14 @@ def dst(index: str) -> Path:
     return root / f"src/janaf/data/{index}.txt"
 
 
-async def fetch(session: aiohttp.ClientSession, url: str, dst: Path):
+async def fetch(session: aiohttp.ClientSession, url: str, dst: Path) -> None:
     async with session.get(url) as res:
         data = await res.text("utf-8")
         async with aiofiles.open(dst, "w", encoding="utf-8") as f:
             await f.write(data)
 
 
-async def main():
+async def main() -> None:
     async with aiofiles.open(path_json, encoding="utf-8") as fp:
         indexes = json.load(fp.buffer)["index"]
 

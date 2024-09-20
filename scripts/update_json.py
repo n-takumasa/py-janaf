@@ -11,7 +11,7 @@ root = Path(__file__).parent.parent.absolute()
 dst = root / "src/janaf/janaf.json"
 
 
-async def main():
+async def main() -> None:
     async with aiohttp.ClientSession() as session, session.get(url) as res:
         text = await res.text("utf-8")
         async with aiofiles.open(dst, "w", encoding="utf-8") as f:

@@ -116,7 +116,7 @@ def fix_inf(text: str) -> str:
     return f"{title}\n{header}\n{new_body}"
 
 
-def main():
+def main() -> None:
     for fp in Path("src/janaf/data/").glob("*.txt"):
         orig = fp.read_text(encoding="ascii")
         text = orig
