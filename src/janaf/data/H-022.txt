@@ -1,6 +1,6 @@
 Lithium Hydroxide, Ion (LiOH+)	H1Li1O1+(g)
 T(K)	Cp	S	-[G-H(Tr)]/T	H-H(Tr)	delta-f H	delta-f G	log Kf
-0	0.	0.	INFINITE	-11.137	774.087				
+0	0.	0.	+inf	-11.137	774.087				
 100	32.662	178.163	259.751	-8.159						
 200	41.973	203.872	225.848	-4.395						
 250	44.971	213.579	222.449	-2.217						

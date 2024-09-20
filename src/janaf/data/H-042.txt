@@ -1,6 +1,6 @@
 Strontium Hydroxide, Ion (SrOH+)	H1O1Sr1+(g)
 T(K)	Cp	S	-[G-H(Tr)]/T	H-H(Tr)	delta-f H	delta-f G	log Kf
-0	0.	0.	INFINITE	-10.760	318.986				
+0	0.	0.	+inf	-10.760	318.986				
 100	30.774	199.518	277.769	-7.825						
 200	40.248	223.738	245.112	-4.275						
 250	43.779	233.120	241.797	-2.169						

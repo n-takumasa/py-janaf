@@ -1,6 +1,6 @@
 Magnesium Chloride, Ion (MgCl+)	Cl1Mg1+(g)
 T(K)	Cp	S	-[G-H(Tr)]/T	H-H(Tr)	delta-f H	delta-f G	log Kf
-0	0.	0.	INFINITE	-9.516	646.579				
+0	0.	0.	+inf	-9.516	646.579				
 100	30.033	192.784	258.681	-6.590						
 200	33.588	214.752	231.749	-3.399						
 250	34.711	222.375	229.136	-1.690						

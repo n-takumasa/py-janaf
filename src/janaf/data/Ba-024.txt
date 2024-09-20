@@ -1,6 +1,6 @@
 Barium Hydroxide, Ion (BaOH+)	Ba1H1O1+(g)
 T(K)	Cp	S	-[G-H(Tr)]/T	H-H(Tr)	delta-f H	delta-f G	log Kf
-0	0.	0.	INFINITE	-10.823	269.364				
+0	0.	0.	+inf	-10.823	269.364				
 100	30.902	205.415	284.269	-7.885						
 200	40.603	229.824	251.356	-4.306						
 250	44.104	239.283	248.018	-2.184						

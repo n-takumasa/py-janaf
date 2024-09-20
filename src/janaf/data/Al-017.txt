@@ -1,6 +1,6 @@
 Aluminum Chloride Fluoride, Ion (AlClF+)	Al1Cl1F1+(g)
 T(K)	Cp	S	-[G-H(Tr)]/T	H-H(Tr)	delta-f H	delta-f G	log Kf
-0	0.	0.	INFINITE	-12.635	270.854				
+0	0.	0.	+inf	-12.635	270.854				
 100	39.763	209.503	302.848	-9.334						
 200	47.610	239.743	264.378	-4.927						
 250	50.330	250.669	260.574	-2.476						
