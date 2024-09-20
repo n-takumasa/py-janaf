@@ -9,9 +9,10 @@
 # ///
 
 import os
-from matplotlib.axes import Axes
+
 import matplotlib.pyplot as plt
 import polars as pl
+from matplotlib.axes import Axes
 
 import janaf
 
