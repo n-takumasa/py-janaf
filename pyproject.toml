@@ -45,8 +45,6 @@ lint = ["ruff"]
 type = ["mypy[install-types]", "janaf[test,script]"]
 example = [
   "matplotlib",
-  "pandas >= 1.5.0",  # polars.DataFrame.to_pandas
-  "pyarrow >= 8.0.0",  # polars.DataFrame.to_pandas
 ]
 dev = [
   "janaf[test,script,lint,type,example]",
