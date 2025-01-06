@@ -1,13 +1,14 @@
 name: test
 
 on:
+  workflow_dispatch:
   push:
     branches: [main, master]
   pull_request:
     branches: [main, master]
 
 concurrency:
-  group: test-${{ github.head_ref }}
+  group: test-${{ github.ref }}
   cancel-in-progress: true
 
 env:
@@ -15,49 +16,44 @@ env:
   FORCE_COLOR: "1"
 
 jobs:
-  check:
-    name: Static analysis
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version-file: "pyproject.toml"
-      - name: Install uv
-        uses: astral-sh/setup-uv@v3
-      - run: uv venv
-      - name: Install tox
-        run: uv pip install tox tox-uv
-      - name: Run static analysis
-        run: uv run tox run -e lint
-      - name: Run mypy
-        run: uv run tox run -e type
-
   run:
-    needs: check
-    name: Python ${{ matrix.python-version }} on ${{ startsWith(matrix.os, 'macos-') && 'macOS' || startsWith(matrix.os, 'windows-') && 'Windows' || 'Linux' }}
+    name: test with ${{ matrix.env }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
-        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
+        env: ["3.13", "3.12", "3.11", "3.10", "3.9", "3.8"]
         include:
           - os: windows-latest
-            python-version: 3.12
+            env: "3.13"
           - os: macos-latest
-            python-version: 3.12
+            env: "3.13"
 
     steps:
       - uses: actions/checkout@v4
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
         with:
-          python-version: ${{ matrix.python-version }}
-      - name: Install uv
-        uses: astral-sh/setup-uv@v3
-      - run: uv venv
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@v5
       - name: Install tox
-        run: uv pip install tox tox-uv tox-gh-actions
-      - name: Run tests
-        run: uv run tox
+        run: >-
+          uv tool install
+          --python-preference only-managed
+          --python 3.13
+          tox
+          --with tox-uv
+          --with tox-gh
+      - name: Install Python
+        if: matrix.env != '3.13'
+        run: >-
+          uv python install
+          --python-preference only-managed
+          ${{ matrix.env }}
+      - name: Setup test suite
+        run: tox run -vv --notest --skip-missing-interpreters false
+        env:
+          TOX_GH_MAJOR_MINOR: ${{ matrix.env }}
+      - name: Run test suite
+        run: tox run --skip-pkg-install
+        env:
+          TOX_GH_MAJOR_MINOR: ${{ matrix.env }}
