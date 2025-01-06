@@ -3,8 +3,6 @@
 # dependencies = [
 #   "janaf",
 #   "matplotlib",
-#   "pandas >= 1.5.0",  # polars.DataFrame.to_pandas
-#   "pyarrow >= 8.0.0",  # polars.DataFrame.to_pandas
 # ]
 # ///
 
@@ -16,12 +14,10 @@ import janaf
 
 t = janaf.search(name="Water, 1 Bar")
 
-df = t.df.to_pandas(use_pyarrow_extension_array=True).set_index("T(K)")
-
 fig, axes = plt.subplots(4, 2, sharex="col")
 ax: Axes
-for ax, col in zip(axes.flat, [c for c in df.columns if c not in {"Note"}]):
-    df.plot(y=col, ax=ax, legend=False)
+for ax, col in zip(axes.flat, [c for c in t.df.columns if c not in {"T(K)", "Note"}]):
+    ax.plot("T(K)", col, data=t.df)
     ax.set_title(col)
     if col in {"Cp", "S", "-[G-H(Tr)]/T"}:
         ax.set_ylabel(f"{col} J/K/mol")
