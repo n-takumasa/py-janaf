@@ -1,0 +1,41 @@
+requires = [
+    "tox>=4.21",
+    "tox-uv",
+]
+env_list = [
+    "lint", "type",
+    "3.13", "3.12", "3.11", "3.10", "3.9", "3.8",
+]
+
+[gh.python]
+"3.13" = ["3.13", "lint", "type"]
+"3.12" = ["3.12"]
+"3.11" = ["3.11"]
+"3.10" = ["3.10"]
+"3.9" = ["3.9"]
+"3.8" = ["3.8"]
+
+[env_run_base]
+package = "wheel"
+wheel_build_env = ".pkg"
+extras = ["test"]
+commands = [
+    ["pytest", "-p", "no:faulthandler", { replace = "posargs", default = ["tests"], extend = true }],
+]
+
+[env.lint]
+package = "skip"
+deps = [
+    "ruff",
+]
+commands = [
+    ["ruff", "format", "--check", { replace = "posargs", default = ["."], extend = true }],
+    ["ruff", "check", "--no-fix", { replace = "posargs", default = ["."], extend = true }],
+]
+
+[env.type]
+package = "wheel"
+extras = ["type"]
+commands = [
+    ["mypy", "--install-types", "--non-interactive", { replace = "posargs", default = [], extend = true }],
+]
