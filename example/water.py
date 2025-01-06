@@ -8,8 +8,6 @@
 # ]
 # ///
 
-import os
-
 import matplotlib.pyplot as plt
 import polars as pl
 from matplotlib.axes import Axes
@@ -39,5 +37,5 @@ for ax in axes.flat:
 
 fig.suptitle(f"{t.name} {t.formula}")
 fig.tight_layout()
-if not os.getenv("CI"):
-    plt.show()
+
+plt.show()
