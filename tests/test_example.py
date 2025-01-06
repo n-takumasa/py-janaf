@@ -2,7 +2,7 @@ import os
 import subprocess
 import sys
 from pathlib import Path
-from tempfile import TemporaryFile
+from tempfile import NamedTemporaryFile
 
 import pytest
 
@@ -29,7 +29,7 @@ def get_example_scripts():
 def test_example(fp: Path):
     env = os.environ.copy()
     env["MPLBACKEND"] = "agg"
-    with TemporaryFile("w", suffix=".py", delete=False) as tmp:
+    with NamedTemporaryFile("w", suffix=".py", delete=False) as tmp:
         # python >= 3.12
         # with TemporaryFile("w", suffix=".py", delete_on_close=False) as tmp:
         tmp.write(_patch + fp.read_text())
