@@ -51,8 +51,8 @@ shape: (62, 9)
 ## Credit
 
 Following files are distributed in [NIST-JANAF Tables](https://janaf.nist.gov/):
-* [py-janaf/janaf/janaf.json](https://github.com/n-takumasa/py-janaf/blob/main/janaf/janaf.json)
-* [py-janaf/janaf/data/](https://github.com/n-takumasa/py-janaf/tree/main/janaf/data)
+* [py-janaf/src/janaf/janaf.json](https://github.com/n-takumasa/py-janaf/blob/main/src/janaf/janaf.json)
+* [py-janaf/src/janaf/data/](https://github.com/n-takumasa/py-janaf/tree/main/src/janaf/data)
 
 ### [NIST-JANAF Tables - Credits](https://janaf.nist.gov/janbanr.html)
 
