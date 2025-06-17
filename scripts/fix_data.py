@@ -51,7 +51,7 @@ def combine_note(text: str) -> str:
         if (r := re.search(r"\t([^\t]+)$", lines[i + 1])) is None:
             raise NotImplementedError
         target = r.group(1)
-        lines[i - 1] = f"{lines[i-1]} {target}"
+        lines[i - 1] = f"{lines[i - 1]} {target}"
         lines[i] = ""
         lines[i + 1] = lines[i + 1].replace(target, "")
 

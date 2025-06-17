@@ -3,9 +3,9 @@ name: test
 on:
   workflow_dispatch:
   push:
-    branches: [main, master]
+    branches: [main]
   pull_request:
-    branches: [main, master]
+    branches: [main]
 
 concurrency:
   group: test-${{ github.ref }}
@@ -14,6 +14,7 @@ concurrency:
 env:
   PYTHONUNBUFFERED: "1"
   FORCE_COLOR: "1"
+  RUFF_OUTPUT_FORMAT: "github"
 
 jobs:
   run:
