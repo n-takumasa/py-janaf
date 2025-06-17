@@ -1,26 +1,14 @@
-[build-system]
-requires = ["hatchling", "hatch-vcs"]
-build-backend = "hatchling.build"
-
-[tool.hatch]
-version.source = "vcs"
-build.hooks.vcs.version-file = "src/janaf/_version.py"
-build.targets.sdist.exclude = [
-  "/.github"
-]
-
 [project]
 dynamic = ["version"]
 name = "janaf"
 description = "Python wrapper for NIST-JANAF Thermochemical Tables"
 readme = "README.md"
 requires-python = ">=3.8"
-license = { text = "MIT" }
+license = "MIT"
 authors = [
   { name = "Takumasa Nakamura", email = "n.takumasa@gmail.com" },
 ]
 classifiers = [
-  "License :: OSI Approved :: MIT License",
   "Operating System :: OS Independent",
   "Programming Language :: Python",
   "Programming Language :: Python :: 3.8",
@@ -40,7 +28,12 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-test = ["pytest >= 8", "pytest-cov", "janaf[example]"]
+test = [
+  "pytest>=8",
+  "pytest-cov",
+  "pytest-github-actions-annotate-failures",
+  "janaf[example]",
+]
 script = ["aiofiles", "aiohttp"]
 lint = ["ruff"]
 type = ["mypy[install-types]", "janaf[test,script]"]
@@ -49,23 +42,38 @@ example = [
 ]
 dev = [
   "janaf[test,script,lint,type,example]",
-  "tox >= 4",
+  "tox>=4",
   "tox-uv",
 ]
 
 [tool.uv]
-managed = false
 dev-dependencies = [
   "janaf[dev]",
 ]
 
-[tool.ruff]
-line-length = 88
-lint.extend-select = [
-  "B",  # flake8-bugbear
-  "I",  # isort
-  "UP",  # pyupgrade
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[tool.hatch]
+version.source = "vcs"
+build.hooks.vcs.version-file = "src/janaf/_version.py"
+build.targets.sdist.exclude = [
+  "/.github"
 ]
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+testpaths = ["tests"]
+log_cli_level = "INFO"
+xfail_strict = true
+addopts = [
+  "-ra",
+  "--strict-config",
+  "--strict-markers",
+  "-p", "no:faulthandler",  # TODO: pola-rs/polars#23142
+]
+filterwarnings = ["error"]
 
 [tool.coverage]
 run.source_pkgs = ["janaf", "tests"]
@@ -78,8 +86,68 @@ report.exclude_lines = [
   "@overload",
 ]
 
+[tool.ruff]
+line-length = 88
+lint.extend-select = [
+  "B",  # flake8-bugbear
+  "I",  # isort
+  "UP",  # pyupgrade
+]
+
+[tool.ruff.format]
+docstring-code-format = true
+
 [tool.mypy]
 files = "src,scripts,example"
 strict = true
 warn_unreachable = true
 enable_error_code = ["ignore-without-code", "redundant-expr", "truthy-bool"]
+
+[tool.tox]
+requires = [
+    "tox>=4.21",
+    "tox-uv",
+]
+env_list = [
+    "lint", "type",
+    "3.13", "3.12", "3.11", "3.10", "3.9", "3.8",
+]
+
+[tool.tox.gh.python]
+"3.13" = ["3.13", "lint", "type"]
+"3.12" = ["3.12"]
+"3.11" = ["3.11"]
+"3.10" = ["3.10"]
+"3.9" = ["3.9"]
+"3.8" = ["3.8"]
+
+[tool.tox.env_run_base]
+package = "wheel"
+wheel_build_env = ".pkg"
+extras = ["test"]
+commands = [
+    ["pytest", { replace = "posargs", default = [], extend = true }],
+]
+pass_env = [
+  "GITHUB_ACTIONS",
+]
+
+[tool.tox.env.lint]
+package = "skip"
+deps = [
+    "ruff",
+]
+commands = [
+    ["ruff", "format", "--check", { replace = "posargs", default = [], extend = true }],
+    ["ruff", "check", "--no-fix", { replace = "posargs", default = [], extend = true }],
+]
+pass_env = [
+    "RUFF_OUTPUT_FORMAT",
+]
+
+[tool.tox.env.type]
+package = "wheel"
+extras = ["type"]
+commands = [
+    ["mypy", "--install-types", "--non-interactive", { replace = "posargs", default = [], extend = true }],
+]
