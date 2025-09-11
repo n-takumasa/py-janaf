@@ -17,6 +17,7 @@ classifiers = [
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
   "Programming Language :: Python :: Implementation :: CPython",
   "Topic :: Scientific/Engineering :: Chemistry",
   "Topic :: Scientific/Engineering :: Physics",
@@ -110,10 +111,11 @@ requires = [
 ]
 env_list = [
     "lint", "type",
-    "3.13", "3.12", "3.11", "3.10", "3.9", "3.8",
+    "3.14", "3.13", "3.12", "3.11", "3.10", "3.9", "3.8",
 ]
 
 [tool.tox.gh.python]
+"3.14" = ["3.14"]
 "3.13" = ["3.13", "lint", "type"]
 "3.12" = ["3.12"]
 "3.11" = ["3.11"]
