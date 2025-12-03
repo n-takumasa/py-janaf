@@ -29,10 +29,10 @@ def get_example_scripts():
 def test_example(fp: Path):
     env = os.environ.copy()
     env["MPLBACKEND"] = "agg"
-    with NamedTemporaryFile("w", suffix=".py", delete=False) as tmp:
+    with NamedTemporaryFile("w", suffix=".py", delete=False, encoding="utf-8") as tmp:
         # python >= 3.12
         # with TemporaryFile("w", suffix=".py", delete_on_close=False) as tmp:
-        tmp.write(_patch + fp.read_text())
+        tmp.write(_patch + fp.read_text(encoding="utf-8"))
         tmp.close()
         ret = subprocess.run(
             [sys.executable, tmp.name],

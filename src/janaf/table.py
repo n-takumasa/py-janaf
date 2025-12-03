@@ -108,7 +108,7 @@ class Table:
         """
         try:
             import numpy as np
-        except ImportError as e:
+        except ImportError as e:  # no cover
             msg = "`numpy` is required for `interp()`"
             raise ImportError(msg) from e
 
@@ -161,7 +161,7 @@ class Table:
         """
         try:
             import xarray as xr
-        except ImportError as e:
+        except ImportError as e:  # no cover
             msg = "`xarray` is required for `to_xarray()`"
             raise ImportError(msg) from e
 
@@ -175,7 +175,7 @@ class Table:
             import pint_xarray  # type: ignore[import-untyped] # noqa: F401
 
             ds = ds.pint.quantify(self.units, unit_registry)
-        except ImportError:
+        except ImportError:  # no cover
             pass
 
         ds = ds.rename({"T(K)": "T"})
