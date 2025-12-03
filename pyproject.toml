@@ -39,8 +39,14 @@ xarray = [
 all = ["janaf[xarray]"]
 
 [dependency-groups]
+optional = [
+  "pandas>=2.0.3",
+  "xarray>=2023.1.0",
+  "pint>=0.21.1",
+  "pint-xarray>=0.3",
+]
 dev = [
-  "janaf[all]",
+  { include-group = "optional" },
   "tox>=4.22",
   "tox-uv",
   { include-group = "lint" },
@@ -51,7 +57,7 @@ dev = [
 lint = ["ruff"]
 script = ["aiofiles", "aiohttp"]
 test = [
-  "janaf[all]",
+  { include-group = "optional" },
   "matplotlib",
   "pytest>=8",
   "pytest-cov",
