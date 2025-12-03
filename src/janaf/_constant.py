@@ -1,4 +1,5 @@
 from types import MappingProxyType
+from typing import Literal
 
 UNITS_MAPPING = MappingProxyType(
     {
@@ -12,3 +13,14 @@ UNITS_MAPPING = MappingProxyType(
         "log Kf": "",
     }
 )
+
+ColumnsType = Literal[
+    "T(K)",
+    "Cp",
+    "S",
+    "-[G-H(Tr)]/T",
+    "H-H(Tr)",
+    "delta-f H",
+    "delta-f G",
+    "log Kf",
+]

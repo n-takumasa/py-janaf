@@ -2,14 +2,15 @@ from __future__ import annotations
 
 import io
 import sys
-from collections.abc import Mapping
+from collections.abc import Collection, Mapping, Sequence
 from dataclasses import dataclass
 from functools import cached_property
 from typing import TYPE_CHECKING, Any, ClassVar, Final
 
 import polars as pl
+import polars.selectors as cs
 
-from janaf._constant import UNITS_MAPPING
+from janaf._constant import UNITS_MAPPING, ColumnsType
 
 if sys.version_info < (3, 9):
     import importlib_resources as resources
@@ -17,6 +18,8 @@ else:
     from importlib import resources
 
 if TYPE_CHECKING:
+    import numpy as np
+    import numpy.typing as npt
     import pint
     import xarray as xr
 
@@ -81,6 +84,62 @@ class Table:
                 .alias("delta-f H"),
                 Note=pl.when(is_note).then(pl.col("delta-f H")),
             )
+        )
+
+    def interp(
+        self,
+        x: float | Sequence[float] | npt.NDArray[np.float64],
+        columns: ColumnsType | Collection[ColumnsType] | None = None,
+    ) -> pl.DataFrame:
+        """
+        Linearly interpolate at specified temperatures.
+
+        Assuming Right Continuous with Left Limits (RCLL).
+
+        Parameters
+        ----------
+        x
+            Temperatures in Kelvin [K]
+
+        Returns
+        -------
+        polars.DataFrame
+            An interpolated table
+        """
+        try:
+            import numpy as np
+        except ImportError as e:
+            msg = "`numpy` is required for `interp()`"
+            raise ImportError(msg) from e
+
+        x = np.atleast_1d(x)
+        x_col = "T(K)"
+        x_data = self.df[x_col].to_numpy()
+
+        idx = np.searchsorted(x_data, x, side="right")
+        idx = np.clip(idx, 1, len(x_data) - 1)
+
+        x_hi = x_data[idx]
+        x_lo = x_data[idx - 1]
+
+        weights = ((x - x_lo) / (x_hi - x_lo))[:, np.newaxis]
+        is_oob = ((x < x_data[0]) | (x > x_data[-1]))[:, np.newaxis]
+
+        selector = cs.numeric() & ~cs.by_name(x_col)
+        if columns:
+            selector &= cs.by_name(columns)
+
+        df = self.df.select(selector)
+        y_data = df.to_numpy()
+
+        y_hi = y_data[idx]
+        y_lo = y_data[idx - 1]
+
+        interpolated = y_lo + weights * (y_hi - y_lo)
+        interpolated = np.where(is_oob, np.nan, interpolated)
+
+        return pl.DataFrame({x_col: x}).hstack(
+            pl.DataFrame(interpolated, schema=df.schema)
         )
 
     def to_xarray(
