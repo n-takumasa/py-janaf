@@ -29,9 +29,18 @@ dependencies = [
   "importlib_resources>=5.0; python_version < '3.9'",
 ]
 
+[project.optional-dependencies]
+xarray = [
+  "pandas>=2.0.3",
+  "xarray>=2023.1.0",
+  "pint>=0.21.1",
+  "pint-xarray>=0.3",
+]
+all = ["janaf[xarray]"]
+
 [dependency-groups]
 dev = [
-  # "janaf[all]",
+  "janaf[all]",
   "tox>=4.22",
   "tox-uv",
   { include-group = "lint" },
@@ -42,6 +51,7 @@ dev = [
 lint = ["ruff"]
 script = ["aiofiles", "aiohttp"]
 test = [
+  "janaf[all]",
   "matplotlib",
   "pytest>=8",
   "pytest-cov",

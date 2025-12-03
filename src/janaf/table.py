@@ -5,7 +5,7 @@ import sys
 from collections.abc import Mapping
 from dataclasses import dataclass
 from functools import cached_property
-from typing import ClassVar, Final
+from typing import TYPE_CHECKING, Any, ClassVar, Final
 
 import polars as pl
 
@@ -15,6 +15,10 @@ if sys.version_info < (3, 9):
     import importlib_resources as resources
 else:
     from importlib import resources
+
+if TYPE_CHECKING:
+    import pint
+    import xarray as xr
 
 
 @dataclass(frozen=True)
@@ -78,3 +82,42 @@ class Table:
                 Note=pl.when(is_note).then(pl.col("delta-f H")),
             )
         )
+
+    def to_xarray(
+        self,
+        unit_registry: pint.UnitRegistry[Any] | None = None,
+    ) -> xr.Dataset:
+        """
+        Convert this Table to a xarray Dataset.
+
+        Parameters
+        ----------
+        unit_registry, optional
+            Argument for `Dataset.pint.quantify`
+
+        Returns
+        -------
+        xarray.Dataset
+            The temperature coordinate is renamed from `"T(K)"` to `"T"`
+        """
+        try:
+            import xarray as xr
+        except ImportError as e:
+            msg = "`xarray` is required for `to_xarray()`"
+            raise ImportError(msg) from e
+
+        ds = (
+            self.df.to_pandas(use_pyarrow_extension_array=False)
+            .pipe(xr.Dataset.from_dataframe)
+            .set_coords("T(K)")
+        )
+
+        try:
+            import pint_xarray  # type: ignore[import-untyped] # noqa: F401
+
+            ds = ds.pint.quantify(self.units, unit_registry)
+        except ImportError:
+            pass
+
+        ds = ds.rename({"T(K)": "T"})
+        return ds
