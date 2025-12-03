@@ -2,10 +2,14 @@ from __future__ import annotations
 
 import io
 import sys
+from collections.abc import Mapping
 from dataclasses import dataclass
 from functools import cached_property
+from typing import ClassVar, Final
 
 import polars as pl
+
+from janaf._constant import UNITS_MAPPING
 
 if sys.version_info < (3, 9):
     import importlib_resources as resources
@@ -16,6 +20,7 @@ else:
 @dataclass(frozen=True)
 class Table:
     index: str
+    units: ClassVar[Final[Mapping[str, str]]] = UNITS_MAPPING
 
     @cached_property
     def fname(self) -> str:
