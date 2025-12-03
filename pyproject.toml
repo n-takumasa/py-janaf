@@ -28,28 +28,28 @@ dependencies = [
   "polars>=1.0.0",
 ]
 
-[project.optional-dependencies]
+[dependency-groups]
+dev = [
+  # "janaf[all]",
+  "tox>=4.22",
+  "tox-uv",
+  { include-group = "lint" },
+  { include-group = "script" },
+  { include-group = "test" },
+  { include-group = "type" },
+]
+lint = ["ruff"]
+script = ["aiofiles", "aiohttp"]
 test = [
+  "matplotlib",
   "pytest>=8",
   "pytest-cov",
   "pytest-github-actions-annotate-failures",
-  "janaf[example]",
 ]
-script = ["aiofiles", "aiohttp"]
-lint = ["ruff"]
-type = ["mypy[install-types]", "janaf[test,script]"]
-example = [
-  "matplotlib",
-]
-dev = [
-  "janaf[test,script,lint,type,example]",
-  "tox>=4",
-  "tox-uv",
-]
-
-[tool.uv]
-dev-dependencies = [
-  "janaf[dev]",
+type = [
+  "mypy[install-types]",
+  { include-group = "script" },
+  { include-group = "test" },
 ]
 
 [build-system]
@@ -126,7 +126,7 @@ env_list = [
 [tool.tox.env_run_base]
 package = "wheel"
 wheel_build_env = ".pkg"
-extras = ["test"]
+dependency_groups = ["test"]
 commands = [
     ["pytest", { replace = "posargs", default = [], extend = true }],
 ]
@@ -149,7 +149,7 @@ pass_env = [
 
 [tool.tox.env.type]
 package = "wheel"
-extras = ["type"]
+dependency_groups = ["type"]
 commands = [
     ["mypy", "--install-types", "--non-interactive", { replace = "posargs", default = [], extend = true }],
 ]
