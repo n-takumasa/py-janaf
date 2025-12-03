@@ -1,11 +1,16 @@
 from __future__ import annotations
 
 import io
+import sys
 from dataclasses import dataclass
 from functools import cached_property
-from pathlib import Path
 
 import polars as pl
+
+if sys.version_info < (3, 9):
+    import importlib_resources as resources
+else:
+    from importlib import resources
 
 
 @dataclass(frozen=True)
@@ -13,13 +18,12 @@ class Table:
     index: str
 
     @cached_property
-    def fname(self) -> Path:
-        return Path(__file__).parent / f"data/{self.index}.txt"
+    def fname(self) -> str:
+        return f"data/{self.index}.txt"
 
     @cached_property
     def raw(self) -> str:
-        with open(self.fname, encoding="utf-8") as f:
-            return f.read()
+        return resources.files("janaf").joinpath(self.fname).read_text("utf-8")
 
     @cached_property
     def header(self) -> list[str]:

@@ -26,6 +26,7 @@ urls.Repository = "https://github.com/n-takumasa/py-janaf"
 
 dependencies = [
   "polars>=1.0.0",
+  "importlib_resources>=5.0; python_version < '3.9'",
 ]
 
 [dependency-groups]

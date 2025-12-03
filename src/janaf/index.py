@@ -1,17 +1,23 @@
 from __future__ import annotations
 
+import sys
 from functools import lru_cache
-from pathlib import Path
 
 import polars as pl
 
 from janaf.table import Table
 
+if sys.version_info < (3, 9):
+    import importlib_resources as resources
+else:
+    from importlib import resources
+
 
 @lru_cache(maxsize=None)
 def db() -> pl.DataFrame:
+    src = resources.files("janaf").joinpath("janaf.json").read_bytes()
     return (
-        pl.read_json(Path(__file__).parent / "janaf.json")
+        pl.read_json(src)
         .explode("*")
         .with_columns(
             pl.col("display")
