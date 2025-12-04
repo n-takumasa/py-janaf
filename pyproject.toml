@@ -57,12 +57,18 @@ dev = [
 ]
 lint = ["ruff"]
 script = ["aiofiles", "aiohttp"]
-test = [
-  { include-group = "optional" },
-  "matplotlib",
+test-base = [
   "pytest>=8",
   "pytest-cov",
   "pytest-github-actions-annotate-failures",
+]
+test = [
+  { include-group = "optional" },
+  "matplotlib",
+  { include-group = "test-base" },
+]
+test-min = [
+  { include-group = "test-base" },
 ]
 type = [
   "mypy[install-types]",
@@ -128,13 +134,13 @@ requires = [
     "tox-uv",
 ]
 env_list = [
-    "lint", "type",
+    "lint", "type", "min",
     "3.14", "3.13", "3.12", "3.11", "3.10", "3.9", "3.8",
 ]
 
 [tool.tox.gh.python]
 "3.14" = ["3.14"]
-"3.13" = ["3.13", "lint", "type"]
+"3.13" = ["3.13", "lint", "type", "min"]
 "3.12" = ["3.12"]
 "3.11" = ["3.11"]
 "3.10" = ["3.10"]
@@ -151,6 +157,10 @@ commands = [
 pass_env = [
   "GITHUB_ACTIONS",
 ]
+
+[tool.tox.env.min]
+dependency_groups = ["test-min"]
+set_env = { ALLOW_MISSING_DEPS = "1" }
 
 [tool.tox.env.lint]
 package = "skip"

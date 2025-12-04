@@ -1,18 +1,11 @@
+import contextlib
 import os
-import subprocess
+import runpy
 import sys
 from pathlib import Path
-from tempfile import NamedTemporaryFile
+from unittest.mock import patch
 
 import pytest
-
-_patch = """\
-import matplotlib.pyplot as plt
-def _show(*args, **kwargs):
-    ...
-plt.show = _show
-
-"""
 
 
 def get_example_scripts():
@@ -22,21 +15,26 @@ def get_example_scripts():
     ]
 
 
-@pytest.mark.parametrize(
-    "fp",
-    get_example_scripts(),
+@pytest.mark.filterwarnings(
+    "ignore:.*'mode' parameter is deprecated.*:DeprecationWarning:matplotlib.*"
 )
+@pytest.mark.parametrize("fp", get_example_scripts())
 def test_example(fp: Path):
-    env = os.environ.copy()
-    env["MPLBACKEND"] = "agg"
-    with NamedTemporaryFile("w", suffix=".py", delete=False, encoding="utf-8") as tmp:
-        # python >= 3.12
-        # with TemporaryFile("w", suffix=".py", delete_on_close=False) as tmp:
-        tmp.write(_patch + fp.read_text(encoding="utf-8"))
-        tmp.close()
-        ret = subprocess.run(
-            [sys.executable, tmp.name],
-            env=env,
-        )
-        os.unlink(tmp.name)
-    assert ret.returncode == 0
+    with contextlib.ExitStack() as stack:
+        with contextlib.suppress(ModuleNotFoundError):
+            import matplotlib
+
+            matplotlib.use("Agg", force=True)
+            stack.enter_context(patch("matplotlib.pyplot.show"))
+
+        try:
+            runpy.run_path(str(fp), run_name="__main__")
+        except ModuleNotFoundError as e:
+            _truly = {"y", "yes", "t", "true", "on", "1"}
+            if os.getenv("ALLOW_MISSING_DEPS", "").lower() in _truly:
+                pytest.skip(e.msg)
+            else:  # no cover
+                raise
+
+    if "matplotlib.pyplot" in sys.modules:
+        sys.modules["matplotlib.pyplot"].close("all")
