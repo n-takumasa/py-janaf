@@ -84,7 +84,8 @@ build-backend = "hatchling.build"
 version.source = "vcs"
 build.hooks.vcs.version-file = "src/janaf/_version.py"
 build.targets.sdist.exclude = [
-  "/.github"
+  "/.github",
+  "scripts/",
 ]
 
 [tool.pytest.ini_options]
