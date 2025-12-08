@@ -31,20 +31,14 @@ dependencies = [
 
 [project.optional-dependencies]
 xarray = [
-  "polars[pandas]>=1.0.0",
   "xarray>=2023.1.0",
-  "pint>=0.21.1",
-  "pint-xarray>=0.3",
 ]
 all = ["janaf[xarray]"]
 
 [dependency-groups]
 optional = [
   # "janaf[all]",
-  "polars[pandas]>=1.0.0",
   "xarray>=2023.1.0",
-  "pint>=0.21.1",
-  "pint-xarray>=0.3",
 ]
 dev = [
   { include-group = "optional" },
@@ -65,6 +59,7 @@ test-base = [
 test = [
   { include-group = "optional" },
   "matplotlib",
+  "pint-xarray",
   { include-group = "test-base" },
 ]
 test-min = [

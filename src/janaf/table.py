@@ -5,7 +5,7 @@ import sys
 from collections.abc import Collection, Mapping, Sequence
 from dataclasses import dataclass
 from functools import cached_property
-from typing import TYPE_CHECKING, Any, ClassVar, Final
+from typing import TYPE_CHECKING, ClassVar, Final
 
 import polars as pl
 import polars.selectors as cs
@@ -20,7 +20,6 @@ else:
 if TYPE_CHECKING:
     import numpy as np
     import numpy.typing as npt
-    import pint
     import xarray as xr
 
 
@@ -142,17 +141,9 @@ class Table:
             pl.DataFrame(interpolated, schema=df.schema)
         )
 
-    def to_xarray(
-        self,
-        unit_registry: pint.UnitRegistry[Any] | None = None,
-    ) -> xr.Dataset:
+    def to_xarray(self) -> xr.Dataset:
         """
         Convert this Table to a xarray Dataset.
-
-        Parameters
-        ----------
-        unit_registry, optional
-            Argument for `Dataset.pint.quantify`
 
         Returns
         -------
@@ -166,17 +157,24 @@ class Table:
             raise ModuleNotFoundError(msg) from e
 
         ds = (
-            self.df.to_pandas(use_pyarrow_extension_array=False)
-            .pipe(xr.Dataset.from_dataframe)
+            xr.Dataset(
+                {
+                    col.name: (
+                        (
+                            ("index",),
+                            col,
+                            (
+                                {"units": units}
+                                if (units := self.units.get(col.name)) is not None
+                                else {}
+                            ),
+                        )
+                    )
+                    for col in self.df.with_row_index().iter_columns()
+                }
+            )
             .set_coords("T(K)")
+            .rename({"T(K)": "T"})
         )
 
-        try:
-            import pint_xarray  # type: ignore[import-untyped] # noqa: F401
-
-            ds = ds.pint.quantify(self.units, unit_registry)
-        except ModuleNotFoundError:
-            pass
-
-        ds = ds.rename({"T(K)": "T"})
         return ds
