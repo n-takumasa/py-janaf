@@ -34,10 +34,10 @@ jobs:
             env: "3.13"
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           persist-credentials: false
-      - uses: astral-sh/setup-uv@557e51de59eb14aaaba2ed9621916900a91d50c6  # v6.6.1
+      - uses: astral-sh/setup-uv@1e862dfacbd1d6d858c55d9b792c756523627244  # v7.1.4
         with:
           enable-cache: false
       - name: Install tox

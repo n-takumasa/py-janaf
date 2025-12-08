@@ -19,3 +19,4 @@ src/janaf/_version.py
 
 # coverage
 .coverage
+coverage.*

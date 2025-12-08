@@ -26,30 +26,49 @@ urls.Repository = "https://github.com/n-takumasa/py-janaf"
 
 dependencies = [
   "polars>=1.0.0",
+  "importlib_resources>=5.0; python_version < '3.9'",
 ]
 
 [project.optional-dependencies]
-test = [
+xarray = [
+  "xarray>=2023.1.0",
+]
+all = ["janaf[xarray]"]
+
+[dependency-groups]
+optional = [
+  # "janaf[all]",
+  "xarray>=2023.1.0",
+]
+dev = [
+  { include-group = "optional" },
+  "tox>=4.22",
+  "tox-uv",
+  { include-group = "lint" },
+  { include-group = "script" },
+  { include-group = "test" },
+  { include-group = "type" },
+]
+lint = ["ruff"]
+script = ["aiofiles", "aiohttp"]
+test-base = [
   "pytest>=8",
   "pytest-cov",
   "pytest-github-actions-annotate-failures",
-  "janaf[example]",
 ]
-script = ["aiofiles", "aiohttp"]
-lint = ["ruff"]
-type = ["mypy[install-types]", "janaf[test,script]"]
-example = [
+test = [
+  { include-group = "optional" },
   "matplotlib",
+  "pint-xarray",
+  { include-group = "test-base" },
 ]
-dev = [
-  "janaf[test,script,lint,type,example]",
-  "tox>=4",
-  "tox-uv",
+test-min = [
+  { include-group = "test-base" },
 ]
-
-[tool.uv]
-dev-dependencies = [
-  "janaf[dev]",
+type = [
+  "mypy[install-types]",
+  { include-group = "script" },
+  { include-group = "test" },
 ]
 
 [build-system]
@@ -60,7 +79,8 @@ build-backend = "hatchling.build"
 version.source = "vcs"
 build.hooks.vcs.version-file = "src/janaf/_version.py"
 build.targets.sdist.exclude = [
-  "/.github"
+  "/.github",
+  "scripts/",
 ]
 
 [tool.pytest.ini_options]
@@ -110,13 +130,13 @@ requires = [
     "tox-uv",
 ]
 env_list = [
-    "lint", "type",
+    "lint", "type", "min",
     "3.14", "3.13", "3.12", "3.11", "3.10", "3.9", "3.8",
 ]
 
 [tool.tox.gh.python]
 "3.14" = ["3.14"]
-"3.13" = ["3.13", "lint", "type"]
+"3.13" = ["3.13", "lint", "type", "min"]
 "3.12" = ["3.12"]
 "3.11" = ["3.11"]
 "3.10" = ["3.10"]
@@ -126,13 +146,17 @@ env_list = [
 [tool.tox.env_run_base]
 package = "wheel"
 wheel_build_env = ".pkg"
-extras = ["test"]
+dependency_groups = ["test"]
 commands = [
     ["pytest", { replace = "posargs", default = [], extend = true }],
 ]
 pass_env = [
   "GITHUB_ACTIONS",
 ]
+
+[tool.tox.env.min]
+dependency_groups = ["test-min"]
+set_env = { ALLOW_MISSING_DEPS = "1" }
 
 [tool.tox.env.lint]
 package = "skip"
@@ -149,7 +173,7 @@ pass_env = [
 
 [tool.tox.env.type]
 package = "wheel"
-extras = ["type"]
+dependency_groups = ["type"]
 commands = [
     ["mypy", "--install-types", "--non-interactive", { replace = "posargs", default = [], extend = true }],
 ]

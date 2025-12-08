@@ -1,25 +1,37 @@
 from __future__ import annotations
 
 import io
+import sys
+from collections.abc import Mapping
 from dataclasses import dataclass
 from functools import cached_property
-from pathlib import Path
+from typing import TYPE_CHECKING, ClassVar, Final
 
 import polars as pl
+
+from janaf._constant import UNITS_MAPPING
+
+if sys.version_info < (3, 9):
+    import importlib_resources as resources
+else:
+    from importlib import resources
+
+if TYPE_CHECKING:
+    import xarray as xr
 
 
 @dataclass(frozen=True)
 class Table:
     index: str
+    units: ClassVar[Final[Mapping[str, str]]] = UNITS_MAPPING
 
     @cached_property
-    def fname(self) -> Path:
-        return Path(__file__).parent / f"data/{self.index}.txt"
+    def fname(self) -> str:
+        return f"data/{self.index}.txt"
 
     @cached_property
     def raw(self) -> str:
-        with open(self.fname, encoding="utf-8") as f:
-            return f.read()
+        return resources.files("janaf").joinpath(self.fname).read_text("utf-8")
 
     @cached_property
     def header(self) -> list[str]:
@@ -69,3 +81,41 @@ class Table:
                 Note=pl.when(is_note).then(pl.col("delta-f H")),
             )
         )
+
+    def to_xarray(self) -> xr.Dataset:
+        """
+        Convert this Table to a xarray Dataset.
+
+        Returns
+        -------
+        xarray.Dataset
+            The temperature coordinate is renamed from `"T(K)"` to `"T"`
+        """
+        try:
+            import xarray as xr
+        except ModuleNotFoundError as e:
+            msg = "`xarray` is required for `to_xarray()`"
+            raise ModuleNotFoundError(msg) from e
+
+        ds = (
+            xr.Dataset(
+                {
+                    col.name: (
+                        (
+                            ("index",),
+                            col,
+                            (
+                                {"units": units}
+                                if (units := self.units.get(col.name)) is not None
+                                else {}
+                            ),
+                        )
+                    )
+                    for col in self.df.with_row_index().iter_columns()
+                }
+            )
+            .set_coords("T(K)")
+            .rename({"T(K)": "T"})
+        )
+
+        return ds
