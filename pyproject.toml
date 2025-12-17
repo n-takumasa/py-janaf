@@ -47,7 +47,7 @@ dev = [
   { include-group = "lint" },
   { include-group = "script" },
   { include-group = "test" },
-  { include-group = "type" },
+  { include-group = "type_ty" },
 ]
 lint = ["ruff"]
 script = ["aiofiles", "aiohttp"]
@@ -65,7 +65,13 @@ test = [
 test-min = [
   { include-group = "test-base" },
 ]
-type = [
+type_ty = [
+  "ty>=0.0.2",
+  "importlib_resources>=5.0",
+  { include-group = "script" },
+  { include-group = "test" },
+]
+type_mypy = [
   "mypy[install-types]",
   { include-group = "script" },
   { include-group = "test" },
@@ -130,13 +136,13 @@ requires = [
     "tox-uv",
 ]
 env_list = [
-    "lint", "type", "min",
+    "lint", "type_ty", "type_mypy", "min",
     "3.14", "3.13", "3.12", "3.11", "3.10", "3.9", "3.8",
 ]
 
 [tool.tox.gh.python]
 "3.14" = ["3.14"]
-"3.13" = ["3.13", "lint", "type", "min"]
+"3.13" = ["3.13", "lint", "type_ty", "type_mypy", "min"]
 "3.12" = ["3.12"]
 "3.11" = ["3.11"]
 "3.10" = ["3.10"]
@@ -171,9 +177,16 @@ pass_env = [
     "RUFF_OUTPUT_FORMAT",
 ]
 
-[tool.tox.env.type]
+[tool.tox.env.type_ty]
 package = "wheel"
-dependency_groups = ["type"]
+dependency_groups = ["type_ty"]
+commands = [
+    ["ty", "check", { replace = "posargs", default = [], extend = true }],
+]
+
+[tool.tox.env.type_mypy]
+package = "wheel"
+dependency_groups = ["type_mypy"]
 commands = [
     ["mypy", "--install-types", "--non-interactive", { replace = "posargs", default = [], extend = true }],
 ]
