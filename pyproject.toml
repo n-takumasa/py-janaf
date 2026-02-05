@@ -179,7 +179,7 @@ commands = [
 
 [tool.tox.env.min]
 dependency_groups = ["test-min"]
-set_env = { ALLOW_MISSING_DEPS = "1" }
+set_env = { ALLOW_MISSING_DEPS = "1", PY_IGNORE_IMPORTMISMATCH = "1" }  # pytest-dev/pytest#9567
 
 [tool.tox.env.lint]
 package = "skip"

@@ -15,10 +15,7 @@ def get_example_scripts():
     ]
 
 
-@pytest.mark.filterwarnings(
-    "ignore:.*'mode' parameter is deprecated.*:DeprecationWarning:matplotlib.*"
-)
-@pytest.mark.filterwarnings("ignore::pyparsing.warnings.PyparsingDeprecationWarning")
+@pytest.mark.filterwarnings("ignore::DeprecationWarning:matplotlib.*")
 @pytest.mark.parametrize("fp", get_example_scripts())
 def test_example(fp: Path):
     with contextlib.ExitStack() as stack:
