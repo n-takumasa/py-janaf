@@ -7,14 +7,14 @@ import polars as pl
 
 from janaf.table import Table
 
-if sys.version_info < (3, 9):
-    import importlib_resources as resources
-else:
+if sys.version_info >= (3, 9):
     from importlib import resources
+else:
+    import importlib_resources as resources
 
 
 @lru_cache(maxsize=None)
-def db() -> pl.DataFrame:
+def db() -> pl.DataFrame:  # noqa: D103
     src = resources.files("janaf").joinpath("janaf.json").read_bytes()
     return (
         pl.read_json(src)
@@ -30,7 +30,7 @@ def db() -> pl.DataFrame:
     )
 
 
-class NotUnique(Exception):  # noqa: N818
+class NotUnique(Exception):  # noqa: D101, N818
     pass
 
 
@@ -62,8 +62,7 @@ def search(
     NotUnique
         Occurs when search results are not unique.
     """
-
-    expr = pl.lit(True)
+    expr = pl.lit(value=True)
     if formula:
         expr &= pl.col("formula").str.contains(
             formula if formula[0] == "^" else f"^{formula}"

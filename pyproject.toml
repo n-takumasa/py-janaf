@@ -125,14 +125,40 @@ report.exclude_lines = [
 
 [tool.ruff]
 line-length = 88
-lint.extend-select = [
-  "B",  # flake8-bugbear
-  "I",  # isort
-  "UP",  # pyupgrade
-]
 
 [tool.ruff.format]
+preview = false
 docstring-code-format = true
+
+[tool.ruff.lint]
+preview = true
+pydocstyle.convention = "numpy"
+extend-select = ["ALL"]
+extend-ignore = [
+  # https://docs.astral.sh/ruff/formatter/#conflicting-lint-rules
+  "W191", "E111", "E114", "E117", "D206", "D300",
+  "Q000", "Q001", "Q002", "COM812", "COM819", "E501",
+  #
+  "D100",  # undocumented-public-module
+  "D104",  # undocumented-public-package
+  "FIX002",  # line-contains-todo
+  "PLC0415",  # import-outside-top-level
+  "RET504",  # unnecessary-assign
+  "TD002",  # missing-todo-author
+  #
+  "CPY001",  # missing-copyright-notice
+  "PLC1901",  # compare-to-empty-string
+  "RUF067",  # non-empty-init-module
+]
+extend-per-file-ignores."example/**.py" = [
+  "D100",
+]
+extend-per-file-ignores."scripts/**.py" = [
+  "D100", "D103", "INP001", "LOG015", "PTH123", "S101", 
+]
+extend-per-file-ignores."tests/**.py" = [
+  "ANN201", "D100", "D103", "ICN001", "PTH123", "PLR2004", "S101", 
+]
 
 [tool.mypy]
 files = "src,scripts,example"

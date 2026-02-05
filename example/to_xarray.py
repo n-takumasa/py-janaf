@@ -14,7 +14,6 @@ import xarray as xr
 
 import janaf
 
-# ureg = pint_xarray.unit_registry
 ureg = pint_xarray.setup_registry(pint.UnitRegistry())
 if pint.__version__ >= "0.23.0":  # for py3.8
     ureg.formatter.default_format = "~P"

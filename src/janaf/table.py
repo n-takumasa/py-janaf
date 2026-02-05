@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import io
 import sys
-from collections.abc import Mapping
 from dataclasses import dataclass
 from functools import cached_property
 from typing import TYPE_CHECKING, ClassVar, Final
@@ -11,12 +10,14 @@ import polars as pl
 
 from janaf._constant import UNITS_MAPPING
 
-if sys.version_info < (3, 9):
-    import importlib_resources as resources
-else:
+if sys.version_info >= (3, 9):
     from importlib import resources
+else:
+    import importlib_resources as resources
 
 if TYPE_CHECKING:
+    from collections.abc import Mapping
+
     import xarray as xr
 
 
@@ -28,27 +29,27 @@ class Table:
     units: ClassVar[Final[Mapping[str, str]]] = UNITS_MAPPING
 
     @cached_property
-    def fname(self) -> str:
+    def fname(self) -> str:  # noqa: D102
         return f"data/{self.index}.txt"
 
     @cached_property
-    def raw(self) -> str:
+    def raw(self) -> str:  # noqa: D102
         return resources.files("janaf").joinpath(self.fname).read_text("utf-8")
 
     @cached_property
-    def header(self) -> list[str]:
+    def header(self) -> list[str]:  # noqa: D102
         return self.raw.split("\n", 1)[0].split("\t", 1)
 
     @cached_property
-    def name(self) -> str:
+    def name(self) -> str:  # noqa: D102
         return self.header[0]
 
     @cached_property
-    def formula(self) -> str:
+    def formula(self) -> str:  # noqa: D102
         return self.header[1]
 
     @cached_property
-    def body(self) -> str:
+    def body(self) -> str:  # noqa: D102
         return self.raw.split("\n", 1)[1]
 
     @cached_property
@@ -107,6 +108,10 @@ class Table:
         -------
         xarray.Dataset
             The temperature coordinate is renamed from `"T(K)"` to `"T"`
+
+        Raises
+        ------
+        ModuleNotFoundError
         """
         try:
             import xarray as xr

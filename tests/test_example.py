@@ -28,8 +28,8 @@ def test_example(fp: Path):
         try:
             runpy.run_path(str(fp), run_name="__main__")
         except ModuleNotFoundError as e:
-            _truly = {"y", "yes", "t", "true", "on", "1"}
-            if os.getenv("ALLOW_MISSING_DEPS", "").lower() in _truly:
+            truly = {"y", "yes", "t", "true", "on", "1"}
+            if os.getenv("ALLOW_MISSING_DEPS", "").lower() in truly:
                 pytest.skip(e.msg)
             else:  # no cover
                 raise
