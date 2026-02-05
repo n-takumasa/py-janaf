@@ -1,0 +1,6 @@
+.highlight {
+    /* .gp = Generic, prompt */
+    .gp {
+        user-select: none;
+    }
+}

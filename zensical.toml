@@ -1,0 +1,91 @@
+[project]
+site_name = "py-janaf"
+site_url = "https://n-takumasa.github.io/py-janaf/"
+site_description = "Python wrapper for NIST-JANAF Thermochemical Tables"
+site_author = "Takumasa N."
+copyright = "Copyright &copy; 2026 Takumasa N."
+docs_dir = "docs"
+side_dir = "site"
+repo_url = "https://github.com/n-takumasa/py-janaf"
+extra_css = ["stylesheets/extra.css"]
+nav = [
+  { Home = "index.md" },
+  "api.md",
+]
+
+[project.theme]
+variant = "modern"
+# custom_dir = "docs/_overrides"
+language = "en"
+font.text = "Noto Sans"
+font.code = "monospace"
+icon.logo = "lucide/book"
+icon.repo = "fontawesome/brands/github"
+
+features = [
+  # "announce.dismiss",
+  # "content.action.edit",
+  # "content.action.view",
+  "content.code.annotate",
+  "content.code.copy",
+  "content.code.select",
+  "content.footnote.tooltips",
+  "content.tabs.link",
+  "content.tooltips",
+  "header.autohide",
+  "navigation.expand",
+  "navigation.footer",
+  "navigation.indexes",
+  "navigation.instant",
+  "navigation.instant.prefetch",
+  # "navigation.instant.progress",
+  "navigation.path",
+  "navigation.prune",
+  "navigation.sections",
+  # "navigation.tabs",
+  # "navigation.tabs.sticky",
+  "navigation.top",
+  "navigation.tracking",
+  "search.highlight",
+  "toc.follow",
+  "toc.integrate",
+]
+
+[[project.theme.palette]]
+media = "(prefers-color-scheme)"
+toggle.icon = "lucide/sun-moon"
+toggle.name = "Switch to light mode"
+
+[[project.theme.palette]]
+media = "(prefers-color-scheme: light)"
+scheme = "default"
+toggle.icon = "lucide/sun"
+toggle.name = "Switch to dark mode"
+
+[[project.theme.palette]]
+media = "(prefers-color-scheme: dark)"
+scheme = "slate"
+toggle.icon = "lucide/moon"
+toggle.name = "Switch to system preference"
+
+[project.markdown_extensions.pymdownx.highlight]
+auto_title = true
+
+[project.markdown_extensions.pymdownx.superfences]
+[project.markdown_extensions.pymdownx.inlinehilite]
+[project.markdown_extensions.pymdownx.snippets]
+base_path = ["docs/", "."]
+check_paths = true
+
+[project.plugins.mkdocstrings.handlers.python]
+inventories = ["https://docs.python.org/3/objects.inv"]
+paths = ["src"]
+
+[project.plugins.mkdocstrings.handlers.python.options]
+docstring_style = "numpy"
+inherited_members = true
+show_source = true
+show_root_members_full_path = true
+group_by_category = false
+show_symbol_type_heading = true
+members_order = ["__all__", "source"]

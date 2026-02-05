@@ -1,4 +1,5 @@
 # py-janaf: Python wrapper for NIST-JANAF Thermochemical Tables
+
 [![pypi version](https://img.shields.io/pypi/v/janaf.svg)](https://pypi.python.org/project/janaf/)
 [![Python Versions](https://img.shields.io/pypi/pyversions/janaf.svg)](https://pypi.org/project/janaf/)
 
@@ -15,11 +16,11 @@
 
 ## Usage
 
-```
+```bash
 pip install janaf
 ```
 
-```py
+```pycon
 >>> import polars as pl
 >>> import janaf
 >>> table = janaf.search(formula="CO2$")
@@ -38,7 +39,9 @@ shape: (62, 9)
 │ 100.0  ┆ 29.208 ┆ 179.009 ┆ 243.568      ┆ … ┆ -393.208  ┆ -393.683  ┆ 205.639 ┆ null │
 │ 200.0  ┆ 32.359 ┆ 199.975 ┆ 217.046      ┆ … ┆ -393.404  ┆ -394.085  ┆ 102.924 ┆ null │
 │ 298.15 ┆ 37.129 ┆ 213.795 ┆ 213.795      ┆ … ┆ -393.522  ┆ -394.389  ┆ 69.095  ┆ null │
+│ 300.0  ┆ 37.221 ┆ 214.025 ┆ 213.795      ┆ … ┆ -393.523  ┆ -394.394  ┆ 68.67   ┆ null │
 │ …      ┆ …      ┆ …       ┆ …            ┆ … ┆ …         ┆ …         ┆ …       ┆ …    │
+│ 5600.0 ┆ 64.588 ┆ 373.709 ┆ 316.947      ┆ … ┆ -416.794  ┆ -386.439  ┆ 3.605   ┆ null │
 │ 5700.0 ┆ 64.68  ┆ 374.853 ┆ 317.953      ┆ … ┆ -417.658  ┆ -385.89   ┆ 3.536   ┆ null │
 │ 5800.0 ┆ 64.772 ┆ 375.979 ┆ 318.944      ┆ … ┆ -418.541  ┆ -385.324  ┆ 3.47    ┆ null │
 │ 5900.0 ┆ 64.865 ┆ 377.087 ┆ 319.92       ┆ … ┆ -419.445  ┆ -384.745  ┆ 3.406   ┆ null │
@@ -46,16 +49,19 @@ shape: (62, 9)
 └────────┴────────┴─────────┴──────────────┴───┴───────────┴───────────┴─────────┴──────┘
 >>> table.df.filter(pl.col("T(K)")==298.15).item(0, "delta-f H")  # kJ/mol
 -393.522
+
 ```
 
 ## Credit
 
 Following files are distributed in [NIST-JANAF Tables](https://janaf.nist.gov/):
+
 * [py-janaf/src/janaf/janaf.json](https://github.com/n-takumasa/py-janaf/blob/main/src/janaf/janaf.json)
 * [py-janaf/src/janaf/data/](https://github.com/n-takumasa/py-janaf/tree/main/src/janaf/data)
 
 ### [NIST-JANAF Tables - Credits](https://janaf.nist.gov/janbanr.html)
 
+```plain
 NIST Standard Reference Database 13
 
 NIST JANAF THERMOCHEMICAL TABLES 1985
@@ -79,3 +85,4 @@ the Database and to verify that the data contained therein have been
 selected on the basis of sound scientific judgement. However, NIST makes
 no warranties to that effect, and NIST shall not be liable for any damage
 that may result from errors or omissions in the Database.
+```

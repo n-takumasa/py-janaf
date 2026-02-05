@@ -40,25 +40,27 @@ def search(
     name: str | None = None,
     phase: str | None = None,
 ) -> Table:
-    """Search a compound
+    """
+    Search a compound.
 
     Parameters
     ----------
-    formula, optional
-        Regex for `formula`, by default None
-    name, optional
-        Regex for `name`, by default None
-    phase, optional
-        Regex for `phase`, by default None
+    formula
+        Regex for `formula`, by default None.
+    name
+        Regex for `name`, by default None.
+    phase
+        Regex for `phase`, by default None.
 
     Returns
     -------
-        `janaf.Table`
+    janaf.Table
+        The found table.
 
     Raises
     ------
     NotUnique
-        Occurs when search results are not unique
+        Occurs when search results are not unique.
     """
 
     expr = pl.lit(True)

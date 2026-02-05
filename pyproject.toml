@@ -44,6 +44,7 @@ dev = [
   { include-group = "optional" },
   "tox>=4.22",
   "tox-uv",
+  { include-group = "docs" },
   { include-group = "lint" },
   { include-group = "script" },
   { include-group = "test" },
@@ -51,6 +52,10 @@ dev = [
 ]
 lint = ["ruff"]
 script = ["aiofiles", "aiohttp"]
+docs = [
+  "mkdocstrings-python>=1.11.1",
+  "zensical>=0.0.21",
+]
 test-base = [
   "pytest>=8",
   "pytest-cov",
@@ -77,6 +82,9 @@ type_mypy = [
   { include-group = "test" },
 ]
 
+[tool.uv.dependency-groups]
+docs = { requires-python = ">=3.13" }
+
 [build-system]
 requires = ["hatchling", "hatch-vcs"]
 build-backend = "hatchling.build"
@@ -91,7 +99,7 @@ build.targets.sdist.exclude = [
 
 [tool.pytest.ini_options]
 minversion = "6.0"
-testpaths = ["tests"]
+testpaths = ["tests", "src", "README.md"]
 log_cli_level = "INFO"
 xfail_strict = true
 addopts = [
@@ -99,6 +107,8 @@ addopts = [
   "--strict-config",
   "--strict-markers",
   "-p", "no:faulthandler",  # TODO: pola-rs/polars#23142
+  "--doctest-modules",
+  "--doctest-glob", "*.md",
 ]
 filterwarnings = ["error"]
 
@@ -158,6 +168,12 @@ commands = [
 ]
 pass_env = [
   "GITHUB_ACTIONS",
+]
+
+[tool.tox.env.docs]
+dependency_groups = ["docs"]
+commands = [
+  ["zensical", { replace = "posargs", default = ["build", "--clean"], extend = true }],
 ]
 
 [tool.tox.env.min]
