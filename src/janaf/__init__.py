@@ -13,7 +13,7 @@ if TYPE_CHECKING:
     import polars as pl
 
 
-def __getattr__(name: str) -> Any:
+def __getattr__(name: str) -> Any:  # noqa: ANN401
     from janaf.index import db
 
     if name == "db":
@@ -25,10 +25,10 @@ def __getattr__(name: str) -> Any:
 db: pl.DataFrame
 
 __all__ = [
+    "Table",
     "__version__",
     "db",
     "index",
     "search",
     "table",
-    "Table",
 ]

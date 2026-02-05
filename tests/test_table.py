@@ -55,7 +55,7 @@ def test_table(index: str):
     if index not in {"C-066", "Cl-121"}:
         assert table.df.select((pl.col("H-H(Tr)").diff() >= 0).all()).item()
 
-    R = 8.31446261815324
+    R = 8.31446261815324  # noqa: N806
     atol = 1e-3
     rtol = 1e-3
     # ΔG(T) = ΔfG°(T) + R T ln(Kf) = 0

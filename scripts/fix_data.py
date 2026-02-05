@@ -45,7 +45,7 @@ def combine_note(text: str) -> str:
 
     lines = body.splitlines()
     for i in range(len(lines)):
-        if "+" != lines[i][0]:
+        if lines[i][0] != "+":
             continue
 
         if (r := re.search(r"\t([^\t]+)$", lines[i + 1])) is None:
@@ -68,14 +68,13 @@ def fix_missing_sign(text: str) -> str:
 
     title, header, body = text.split("\n", 2)
 
-    cell = [
-        row
-        for row in csv.reader(
+    cell = list(
+        csv.reader(
             body.splitlines(),
             delimiter="\t",
             quoting=csv.QUOTE_NONE,
         )
-    ]
+    )
 
     for i in range(len(cell) - 1):
         if (
@@ -83,9 +82,9 @@ def fix_missing_sign(text: str) -> str:
             in {"", "-", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"}
             and " " in cell[i][5]
         ):
-            assert len(cell[i]) == 6
+            assert len(cell[i]) == 6  # noqa: PLR2004
             idx = i + 1
-            while len(cell[idx]) != 8:
+            while len(cell[idx]) != 8:  # noqa: PLR2004
                 idx += 1
             cell[i].extend(["", ""])
             h, g, kf = cell[i][5].split()
@@ -127,10 +126,10 @@ def main() -> None:
             text = fix_missing_sign(text)
             text = fix_inf(text)
         except:
-            logging.error(fp)
+            logging.exception(fp)
             raise
         if text != orig:
-            logging.info(f"fixed: {fp}")
+            logging.info(f"fixed: {fp}")  # noqa: G004
             fp.write_text(text, encoding="ascii")
 
 
