@@ -10,10 +10,10 @@ import polars as pl
 
 from janaf._constant import UNITS_MAPPING
 
-if sys.version_info < (3, 9):
-    import importlib_resources as resources
-else:
+if sys.version_info >= (3, 9):
     from importlib import resources
+else:
+    import importlib_resources as resources
 
 if TYPE_CHECKING:
     from collections.abc import Mapping
@@ -108,6 +108,10 @@ class Table:
         -------
         xarray.Dataset
             The temperature coordinate is renamed from `"T(K)"` to `"T"`
+
+        Raises
+        ------
+        ModuleNotFoundError
         """
         try:
             import xarray as xr

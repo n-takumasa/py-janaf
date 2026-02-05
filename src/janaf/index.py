@@ -7,10 +7,10 @@ import polars as pl
 
 from janaf.table import Table
 
-if sys.version_info < (3, 9):
-    import importlib_resources as resources
-else:
+if sys.version_info >= (3, 9):
     from importlib import resources
+else:
+    import importlib_resources as resources
 
 
 @lru_cache(maxsize=None)
