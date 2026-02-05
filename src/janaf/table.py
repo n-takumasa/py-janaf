@@ -23,6 +23,7 @@ if TYPE_CHECKING:
 @dataclass(frozen=True)
 class Table:
     """Represents a NIST-JANAF Thermochemical Table."""
+
     index: str
     units: ClassVar[Final[Mapping[str, str]]] = UNITS_MAPPING
 
@@ -64,7 +65,7 @@ class Table:
         - `H-H(Tr)`: Enthalpy increment [kJ/mol]
         - `delta-f H`: Enthalpy of formation
         - `delta-f G`: Gibbs energy of formation
-        - `log Kf`: Logarithm of equilibrium constant of formation
+        - `log Kf`: Logarithm (base 10) of equilibrium constant of formation
         - `Note`: Note string
         """
         is_note = pl.col("delta-f H").str.contains(
