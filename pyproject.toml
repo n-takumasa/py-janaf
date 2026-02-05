@@ -166,6 +166,7 @@ dependency_groups = ["test"]
 commands = [
     ["pytest", { replace = "posargs", default = [], extend = true }],
 ]
+set_env = { PY_IGNORE_IMPORTMISMATCH = "1" }  # pytest-dev/pytest#9567
 pass_env = [
   "GITHUB_ACTIONS",
 ]
