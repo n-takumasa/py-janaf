@@ -20,3 +20,6 @@ src/janaf/_version.py
 # coverage
 .coverage
 coverage.*
+
+# docs generated files
+site/

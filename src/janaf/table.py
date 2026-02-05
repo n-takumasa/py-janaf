@@ -22,6 +22,8 @@ if TYPE_CHECKING:
 
 @dataclass(frozen=True)
 class Table:
+    """Represents a NIST-JANAF Thermochemical Table."""
+
     index: str
     units: ClassVar[Final[Mapping[str, str]]] = UNITS_MAPPING
 
@@ -51,6 +53,21 @@ class Table:
 
     @cached_property
     def df(self) -> pl.DataFrame:
+        """
+        The table as a polars DataFrame.
+
+        Columns
+        -------
+        - `T(K)`: Temperature [K]
+        - `Cp`: Molar heat capacity at constant pressure [J/(K*mol)]
+        - `S`: Molar entropy [J/(K*mol)]
+        - `-[G-H(Tr)]/T`: Gibbs energy function [J/(K*mol)]
+        - `H-H(Tr)`: Enthalpy increment [kJ/mol]
+        - `delta-f H`: Enthalpy of formation
+        - `delta-f G`: Gibbs energy of formation
+        - `log Kf`: Logarithm (base 10) of equilibrium constant of formation
+        - `Note`: Note string
+        """
         is_note = pl.col("delta-f H").str.contains(
             "<-->|TRANSITION|PRESSURE|FUGACITY|Cp|UNDEFINED"
         )
@@ -84,7 +101,7 @@ class Table:
 
     def to_xarray(self) -> xr.Dataset:
         """
-        Convert this Table to a xarray Dataset.
+        Convert the Table to a xarray Dataset.
 
         Returns
         -------
