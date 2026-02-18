@@ -1,19 +1,14 @@
 from __future__ import annotations
 
 import io
-import sys
 from dataclasses import dataclass
 from functools import cached_property
+from importlib import resources
 from typing import TYPE_CHECKING, ClassVar, Final
 
 import polars as pl
 
 from janaf._constant import UNITS_MAPPING
-
-if sys.version_info >= (3, 9):
-    from importlib import resources
-else:
-    import importlib_resources as resources
 
 if TYPE_CHECKING:
     from collections.abc import Mapping

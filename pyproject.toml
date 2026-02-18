@@ -3,7 +3,7 @@ dynamic = ["version"]
 name = "janaf"
 description = "Python wrapper for NIST-JANAF Thermochemical Tables"
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 license = "MIT"
 authors = [
   { name = "Takumasa Nakamura", email = "n.takumasa@gmail.com" },
@@ -11,7 +11,6 @@ authors = [
 classifiers = [
   "Operating System :: OS Independent",
   "Programming Language :: Python",
-  "Programming Language :: Python :: 3.8",
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
@@ -26,7 +25,6 @@ urls.Repository = "https://github.com/n-takumasa/py-janaf"
 
 dependencies = [
   "polars>=1.0.0",
-  "importlib_resources>=5.0; python_version < '3.9'",
 ]
 
 [project.optional-dependencies]
@@ -72,7 +70,6 @@ test-min = [
 ]
 type_ty = [
   "ty>=0.0.2",
-  "importlib_resources>=5.0",
   { include-group = "script" },
   { include-group = "test" },
 ]
@@ -173,7 +170,7 @@ requires = [
 ]
 env_list = [
     "lint", "type_ty", "type_mypy", "min",
-    "3.14", "3.13", "3.12", "3.11", "3.10", "3.9", "3.8",
+    "3.14", "3.13", "3.12", "3.11", "3.10", "3.9",
 ]
 
 [tool.tox.gh.python]
@@ -183,7 +180,6 @@ env_list = [
 "3.11" = ["3.11"]
 "3.10" = ["3.10"]
 "3.9" = ["3.9"]
-"3.8" = ["3.8"]
 
 [tool.tox.env_run_base]
 package = "wheel"
