@@ -44,7 +44,7 @@ def test_table(index: str):
     # S(Tr) = -[G(Tr) - H(Tr)] / Tr
     if index not in {"S-016", "S-017", "S-018", "S-019", "S-020"}:
         assert (
-            table.df.filter(pl.col("T(K)") == 298.15)
+            table.df.filter(pl.col("T(K)").is_close(298.15))
             .select(pl.col("S") - pl.col("-[G-H(Tr)]/T"))
             .item()
             == 0

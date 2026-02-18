@@ -24,7 +24,7 @@ classifiers = [
 urls.Repository = "https://github.com/n-takumasa/py-janaf"
 
 dependencies = [
-  "polars>=1.0.0",
+  "polars>=1.32.0",
 ]
 
 [project.optional-dependencies]
