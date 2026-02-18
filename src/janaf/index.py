@@ -1,19 +1,14 @@
 from __future__ import annotations
 
-import sys
-from functools import lru_cache
+from functools import cache
+from importlib import resources
 
 import polars as pl
 
 from janaf.table import Table
 
-if sys.version_info >= (3, 9):
-    from importlib import resources
-else:
-    import importlib_resources as resources
 
-
-@lru_cache(maxsize=None)
+@cache
 def db() -> pl.DataFrame:  # noqa: D103
     src = resources.files("janaf").joinpath("janaf.json").read_bytes()
     return (

@@ -1,5 +1,5 @@
 # /// script
-# requires-python = ">=3.8"
+# requires-python = ">=3.9"
 # dependencies = [
 #   "janaf[xarray]",
 #   "matplotlib",
@@ -15,8 +15,7 @@ import xarray as xr
 import janaf
 
 ureg = pint_xarray.setup_registry(pint.UnitRegistry())
-if pint.__version__ >= "0.23.0":  # for py3.8
-    ureg.formatter.default_format = "~P"
+ureg.formatter.default_format = "~P"
 
 t = janaf.search(formula="Fe", phase="ref")
 ds: xr.Dataset = t.to_xarray().pint.quantify(unit_registry=ureg)
