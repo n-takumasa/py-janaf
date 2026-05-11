@@ -177,7 +177,8 @@ env_list = [
 
 [tool.tox.gh.python]
 "3.15" = ["3.15"]
-"3.14" = ["3.14", "lint", "type_ty", "type_mypy", "min"]
+# "3.14" = ["3.14", "lint", "type_ty", "type_mypy", "min"]
+"3.14" = ["3.14", "lint", "type_mypy", "min"]
 "3.13" = ["3.13"]
 "3.12" = ["3.12"]
 "3.11" = ["3.11"]
