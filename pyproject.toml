@@ -17,6 +17,7 @@ classifiers = [
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
   "Programming Language :: Python :: 3.14",
+  "Programming Language :: Python :: 3.15",
   "Programming Language :: Python :: Implementation :: CPython",
   "Topic :: Scientific/Engineering :: Chemistry",
   "Topic :: Scientific/Engineering :: Physics",
@@ -80,6 +81,7 @@ type_mypy = [
 ]
 
 [tool.uv.dependency-groups]
+dev = { requires-python = ">=3.13" }
 docs = { requires-python = ">=3.13" }
 
 [build-system]
@@ -97,7 +99,7 @@ build.targets.sdist.exclude = [
 [tool.pytest.ini_options]
 minversion = "6.0"
 testpaths = ["tests", "src", "README.md"]
-log_cli_level = "INFO"
+log_level = "INFO"
 xfail_strict = true
 addopts = [
   "-ra",
@@ -130,8 +132,8 @@ docstring-code-format = true
 [tool.ruff.lint]
 preview = true
 pydocstyle.convention = "numpy"
-extend-select = ["ALL"]
-extend-ignore = [
+select = ["ALL"]
+ignore = [
   # https://docs.astral.sh/ruff/formatter/#conflicting-lint-rules
   "W191", "E111", "E114", "E117", "D206", "D300",
   "Q000", "Q001", "Q002", "COM812", "COM819", "E501",
@@ -170,12 +172,14 @@ requires = [
 ]
 env_list = [
     "lint", "type_ty", "type_mypy", "min",
-    "3.14", "3.13", "3.12", "3.11", "3.10", "3.9",
+    "3.15", "3.14", "3.13", "3.12", "3.11", "3.10", "3.9",
 ]
 
 [tool.tox.gh.python]
-"3.14" = ["3.14"]
-"3.13" = ["3.13", "lint", "type_ty", "type_mypy", "min"]
+"3.15" = ["3.15"]
+# "3.14" = ["3.14", "lint", "type_ty", "type_mypy", "min"]
+"3.14" = ["3.14", "lint", "type_mypy", "min"]
+"3.13" = ["3.13"]
 "3.12" = ["3.12"]
 "3.11" = ["3.11"]
 "3.10" = ["3.10"]
