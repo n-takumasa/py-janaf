@@ -13,7 +13,7 @@ def db() -> pl.DataFrame:  # noqa: D103
     src = resources.files("janaf").joinpath("janaf.json").read_bytes()
     return (
         pl.read_json(src)
-        .explode("*")
+        .explode("display", "index", empty_as_null=False)
         .with_columns(
             pl.col("display")
             .str.extract_groups(

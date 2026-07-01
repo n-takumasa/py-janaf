@@ -21,7 +21,7 @@ t = janaf.search(formula="Fe", phase="ref")
 ds: xr.Dataset = t.to_xarray().pint.quantify(unit_registry=ureg)
 
 fig, ax = plt.subplots()
-ds["H-H(Tr)"].plot.line(".-", x="T", ax=ax)
+ds["H-H(Tr)"].plot.line(".-", x="T", ax=ax)  # ty: ignore[invalid-argument-type]
 plt.show()
 
 fig, ax = plt.subplots()

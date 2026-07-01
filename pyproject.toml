@@ -131,7 +131,7 @@ docstring-code-format = true
 preview = true
 pydocstyle.convention = "numpy"
 extend-select = ["ALL"]
-extend-ignore = [
+ignore = [
   # https://docs.astral.sh/ruff/formatter/#conflicting-lint-rules
   "W191", "E111", "E114", "E117", "D206", "D300",
   "Q000", "Q001", "Q002", "COM812", "COM819", "E501",
