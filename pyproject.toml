@@ -4,7 +4,7 @@ name = "janaf"
 description = "Python wrapper for NIST-JANAF Thermochemical Tables"
 readme = "README.md"
 requires-python = ">=3.9"
-license = "MIT"
+license = "0BSD"
 authors = [
   { name = "Takumasa Nakamura", email = "n.takumasa@gmail.com" },
 ]
