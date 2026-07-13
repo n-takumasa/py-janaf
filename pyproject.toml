@@ -107,7 +107,11 @@ addopts = [
   "--doctest-modules",
   "--doctest-glob", "*.md",
 ]
-filterwarnings = ["error"]
+filterwarnings = [
+  "error",
+  # TODO: n-takumasa/py-janaf#54
+  "ignore:In Polars 2.0, the default behavior for `empty_as_null`:DeprecationWarning",
+]
 
 [tool.coverage]
 run.source_pkgs = ["janaf", "tests"]
