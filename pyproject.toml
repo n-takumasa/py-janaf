@@ -226,7 +226,7 @@ pass_env = [
 
 [tool.tox.env.type_ty]
 labels = ["static"]
-package = "skip"
+package = "editable"
 dependency_groups = ["type_ty"]
 commands = [
   ["ty", "check", { replace = "posargs", default = [], extend = true }],
@@ -234,7 +234,7 @@ commands = [
 
 [tool.tox.env.type_mypy]
 labels = ["static"]
-package = "skip"
+package = "editable"
 dependency_groups = ["type_mypy"]
 commands = [
   ["mypy", "--install-types", "--non-interactive", { replace = "posargs", default = [], extend = true }],
