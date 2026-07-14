@@ -16,7 +16,9 @@ t = janaf.search(name="Water, 1 Bar")
 
 fig, axes = plt.subplots(4, 2, sharex="col")
 ax: Axes
-for ax, col in zip(axes.flat, [c for c in t.df.columns if c not in {"T(K)", "Note"}]):
+for ax, col in zip(
+    axes.flat, [c for c in t.df.columns if c not in {"T(K)", "Note"}], strict=False
+):
     ax.plot("T(K)", col, data=t.df)  # type: ignore[arg-type] # pyright: ignore[reportArgumentType]
     ax.set_title(col)
     if col in {"Cp", "S", "-[G-H(Tr)]/T"}:

@@ -3,7 +3,7 @@ dynamic = ["version"]
 name = "janaf"
 description = "Python wrapper for NIST-JANAF Thermochemical Tables"
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 license = "0BSD"
 authors = [
   { name = "Takumasa Nakamura", email = "n.takumasa@gmail.com" },
@@ -11,12 +11,12 @@ authors = [
 classifiers = [
   "Operating System :: OS Independent",
   "Programming Language :: Python",
-  "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
   "Programming Language :: Python :: 3.14",
+  "Programming Language :: Python :: 3.15",
   "Programming Language :: Python :: Implementation :: CPython",
   "Topic :: Scientific/Engineering :: Chemistry",
   "Topic :: Scientific/Engineering :: Physics",
@@ -24,19 +24,19 @@ classifiers = [
 urls.Repository = "https://github.com/n-takumasa/py-janaf"
 
 dependencies = [
-  "polars>=1.32.0",
+  "polars>=1.35.2",
 ]
 
 [project.optional-dependencies]
 xarray = [
-  "xarray>=2023.1.0",
+  "xarray>=2024.9.0",
 ]
 all = ["janaf[xarray]"]
 
 [dependency-groups]
 optional = [
   # "janaf[all]",
-  "xarray>=2023.1.0",
+  "xarray>=2024.9.0",
 ]
 dev = [
   { include-group = "optional" },
@@ -55,17 +55,17 @@ docs = [
   "zensical>=0.0.21",
 ]
 test-base = [
-  "pytest>=8",
-  "pytest-cov",
-  "pytest-github-actions-annotate-failures",
+  "pytest>=9.1.1",
+  "pytest-cov>=7.1.0",
+  "pytest-github-actions-annotate-failures>=0.4.2",
 ]
 test = [
   { include-group = "optional" },
-  "matplotlib",
-  "pint-xarray",
+  "matplotlib>=3.10.5",
+  "pint-xarray>=0.5.1",
   { include-group = "test-base" },
 ]
-test-min = [
+test-minimal = [
   { include-group = "test-base" },
 ]
 type_ty = [
@@ -80,6 +80,7 @@ type_mypy = [
 ]
 
 [tool.uv.dependency-groups]
+dev = { requires-python = ">=3.13" }
 docs = { requires-python = ">=3.13" }
 
 [build-system]
@@ -97,7 +98,7 @@ build.targets.sdist.exclude = [
 [tool.pytest.ini_options]
 minversion = "6.0"
 testpaths = ["tests", "src", "README.md"]
-log_cli_level = "INFO"
+log_level = "INFO"
 xfail_strict = true
 addopts = [
   "-ra",
@@ -111,6 +112,7 @@ filterwarnings = [
   "error",
   # TODO: n-takumasa/py-janaf#54
   "ignore:In Polars 2.0, the default behavior for `empty_as_null`:DeprecationWarning",
+  "ignore:The 'generic' unit for NumPy timedelta is deprecated:DeprecationWarning",
 ]
 
 [tool.coverage]
@@ -169,67 +171,71 @@ enable_error_code = ["ignore-without-code", "redundant-expr", "truthy-bool"]
 
 [tool.tox]
 requires = [
-    "tox>=4.21",
-    "tox-uv",
+  "tox>=4.21",
+  "tox-uv",
 ]
 env_list = [
-    "lint", "type_ty", "type_mypy", "min",
-    "3.14", "3.13", "3.12", "3.11", "3.10", "3.9",
+  "lint", "type_ty", "type_mypy",
+  "3.15-minimal",
+  "3.14", "3.14-minimal", "3.14-lowest",
+  "3.10", "3.10-minimal", "3.10-lowest",
 ]
 
 [tool.tox.gh.python]
-"3.14" = ["3.14"]
-"3.13" = ["3.13", "lint", "type_ty", "type_mypy", "min"]
-"3.12" = ["3.12"]
-"3.11" = ["3.11"]
-"3.10" = ["3.10"]
-"3.9" = ["3.9"]
+"3.15" = ["3.15-minimal"]
+"3.14" = ["3.14", "3.14-minimal", "3.14-lowest"]
+"3.10" = ["3.10", "3.10-minimal", "3.10-lowest"]
 
 [tool.tox.env_run_base]
+labels = ["test"]
 package = "wheel"
 wheel_build_env = ".pkg"
-dependency_groups = ["test"]
-commands = [
-    ["pytest", { replace = "posargs", default = [], extend = true }],
+dependency_groups = [
+  { replace = "if", condition = "factor.minimal", then = "test-minimal", "else" = "test" },
 ]
-set_env = { PY_IGNORE_IMPORTMISMATCH = "1" }  # pytest-dev/pytest#9567
+commands = [
+  ["pytest", { replace = "posargs", default = [], extend = true }],
+]
+set_env.PY_IGNORE_IMPORTMISMATCH = "1"  # pytest-dev/pytest#9567
+set_env.UV_RESOLUTION = { replace = "if", condition = "factor.lowest", then = "lowest-direct", "else" = "highest" }
+set_env.ALLOW_MISSING_DEPS = { replace = "if", condition = "factor.minimal", then = "1", "else" = "0" }
 pass_env = [
   "GITHUB_ACTIONS",
 ]
 
 [tool.tox.env.docs]
+labels = ["docs"]
 dependency_groups = ["docs"]
 commands = [
   ["zensical", { replace = "posargs", default = ["build", "--clean"], extend = true }],
 ]
 
-[tool.tox.env.min]
-dependency_groups = ["test-min"]
-set_env = { ALLOW_MISSING_DEPS = "1", PY_IGNORE_IMPORTMISMATCH = "1" }  # pytest-dev/pytest#9567
-
 [tool.tox.env.lint]
+labels = ["static"]
 package = "skip"
 deps = [
-    "ruff",
+  "ruff",
 ]
 commands = [
-    ["ruff", "format", "--check", { replace = "posargs", default = [], extend = true }],
-    ["ruff", "check", "--no-fix", { replace = "posargs", default = [], extend = true }],
+  ["ruff", "format", "--check", { replace = "posargs", default = [], extend = true }],
+  ["ruff", "check", "--no-fix", { replace = "posargs", default = [], extend = true }],
 ]
 pass_env = [
-    "RUFF_OUTPUT_FORMAT",
+  "RUFF_OUTPUT_FORMAT",
 ]
 
 [tool.tox.env.type_ty]
-package = "wheel"
+labels = ["static"]
+package = "editable"
 dependency_groups = ["type_ty"]
 commands = [
-    ["ty", "check", { replace = "posargs", default = [], extend = true }],
+  ["ty", "check", { replace = "posargs", default = [], extend = true }],
 ]
 
 [tool.tox.env.type_mypy]
-package = "wheel"
+labels = ["static"]
+package = "editable"
 dependency_groups = ["type_mypy"]
 commands = [
-    ["mypy", "--install-types", "--non-interactive", { replace = "posargs", default = [], extend = true }],
+  ["mypy", "--install-types", "--non-interactive", { replace = "posargs", default = [], extend = true }],
 ]
