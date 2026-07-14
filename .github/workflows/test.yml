@@ -17,8 +17,27 @@ env:
   PYTHONUNBUFFERED: "1"
   FORCE_COLOR: "1"
   RUFF_OUTPUT_FORMAT: "github"
+  CI_BASE_PYTHON: "3.14"
 
 jobs:
+  static:
+    name: static analysis
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@d31148d669074a8d0a63714ba94f3201e7020bc3  # v8.3.0
+        with:
+          enable-cache: false
+      - name: Install tox
+        run: >-
+          uv tool install
+          --python-preference only-managed
+          --python ${{ env.CI_BASE_PYTHON }}
+          tox
+          --with tox-uv
+      - run: tox -m static
   run:
     name: test with ${{ matrix.env }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
@@ -26,12 +45,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
-        env: ["3.14", "3.13", "3.12", "3.11", "3.10", "3.9"]
-        include:
-          - os: windows-latest
-            env: "3.13"
-          - os: macos-latest
-            env: "3.13"
+        env: ["3.15", "3.14", "3.10"]
 
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
@@ -44,12 +58,12 @@ jobs:
         run: >-
           uv tool install
           --python-preference only-managed
-          --python 3.13
+          --python ${{ env.CI_BASE_PYTHON }}
           tox
           --with tox-uv
           --with tox-gh
       - name: Install Python
-        if: matrix.env != '3.13'
+        if: matrix.env != env.CI_BASE_PYTHON
         run: >-
           uv python install
           --python-preference only-managed
