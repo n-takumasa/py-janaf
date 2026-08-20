@@ -130,11 +130,9 @@ report.exclude_lines = [
 line-length = 88
 
 [tool.ruff.format]
-preview = false
 docstring-code-format = true
 
 [tool.ruff.lint]
-preview = true
 pydocstyle.convention = "numpy"
 extend-select = ["ALL"]
 ignore = [
