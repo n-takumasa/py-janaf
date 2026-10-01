@@ -47,12 +47,17 @@ dev = [
   { include-group = "script" },
   { include-group = "test" },
   { include-group = "type_ty" },
+  { include-group = "type_pyrefly" },
 ]
 lint = ["ruff"]
 script = ["aiofiles", "aiohttp"]
 docs = [
   "mkdocstrings-python>=1.11.1",
   "zensical>=0.0.21",
+]
+mpl = [
+  "matplotlib>=3.10.5;python_version>='3.10'",
+  "matplotlib>=3.11.2;python_version>='3.15'",
 ]
 test-base = [
   "pytest>=9.1.1",
@@ -61,20 +66,25 @@ test-base = [
 ]
 test = [
   { include-group = "optional" },
-  "matplotlib>=3.10.5",
   "pint-xarray>=0.5.1",
+  { include-group = "mpl" },
   { include-group = "test-base" },
 ]
 test-minimal = [
   { include-group = "test-base" },
 ]
+type_stubs = [
+  "types-aiofiles",
+]
 type_ty = [
-  "ty>=0.0.2",
+  "ty",
+  { include-group = "type_stubs" },
   { include-group = "script" },
   { include-group = "test" },
 ]
-type_mypy = [
-  "mypy[install-types]",
+type_pyrefly = [
+  "pyrefly",
+  { include-group = "type_stubs" },
   { include-group = "script" },
   { include-group = "test" },
 ]
@@ -161,11 +171,12 @@ extend-per-file-ignores."tests/**.py" = [
   "ANN201", "D100", "D103", "ICN001", "PTH123", "PLR2004", "S101", 
 ]
 
-[tool.mypy]
-files = "src,scripts,example"
-strict = true
-warn_unreachable = true
-enable_error_code = ["ignore-without-code", "redundant-expr", "truthy-bool"]
+[tool.ty]
+analysis.respect-type-ignore-comments = false
+
+[tool.pyrefly]
+preset = "strict"
+min-severity = "warn"
 
 [tool.tox]
 requires = [
@@ -173,8 +184,8 @@ requires = [
   "tox-uv",
 ]
 env_list = [
-  "lint", "type_ty", "type_mypy",
-  "3.15-minimal",
+  "lint", "type_ty", "type_pyrefly",
+  "3.15", "3.15-minimal", "3.15-lowest",
   "3.14", "3.14-minimal", "3.14-lowest",
   "3.10", "3.10-minimal", "3.10-lowest",
 ]
@@ -230,10 +241,10 @@ commands = [
   ["ty", "check", { replace = "posargs", default = [], extend = true }],
 ]
 
-[tool.tox.env.type_mypy]
+[tool.tox.env.type_pyrefly]
 labels = ["static"]
 package = "editable"
-dependency_groups = ["type_mypy"]
+dependency_groups = ["type_pyrefly"]
 commands = [
-  ["mypy", "--install-types", "--non-interactive", { replace = "posargs", default = [], extend = true }],
+  ["pyrefly", "check", { replace = "posargs", default = [], extend = true }],
 ]

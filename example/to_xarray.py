@@ -28,6 +28,7 @@ fig, ax = plt.subplots()
 (
     ds["H-H(Tr)"]
     .where(
+        # pyrefly: ignore [implicit-any-lambda]
         lambda x: (
             (x["T"] >= ureg.Quantity(0, "degC"))
             & (x["T"] <= ureg.Quantity(1800, "degC"))
