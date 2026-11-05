@@ -28,13 +28,11 @@ jobs:
         with:
           persist-credentials: false
       - uses: astral-sh/setup-uv@v10.3.2
-        with:
-          enable-cache: false
       - name: Install tox
         run: >-
           uv tool install
           --python-preference only-managed
-          --python ${{ env.CI_BASE_PYTHON }}
+          --python ${CI_BASE_PYTHON}
           tox
           --with tox-uv
       - run: tox -m static
@@ -52,13 +50,11 @@ jobs:
         with:
           persist-credentials: false
       - uses: astral-sh/setup-uv@v10.3.2
-        with:
-          enable-cache: false
       - name: Install tox
         run: >-
           uv tool install
           --python-preference only-managed
-          --python ${{ env.CI_BASE_PYTHON }}
+          --python ${CI_BASE_PYTHON}
           tox
           --with tox-uv
           --with tox-gh
@@ -67,7 +63,9 @@ jobs:
         run: >-
           uv python install
           --python-preference only-managed
-          ${{ matrix.env }}
+          ${CI_MATRIX_ENV}
+        env:
+          CI_MATRIX_ENV: ${{ matrix.env }}
       - name: Setup test suite
         run: tox run -vv --notest --skip-missing-interpreters false
         env:

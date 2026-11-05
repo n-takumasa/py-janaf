@@ -8,6 +8,7 @@ on:
     branches: ["**"]
 
 permissions: {}
+cache-mode: none
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -15,6 +16,7 @@ concurrency:
 
 jobs:
   build:
+    name: build docs
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7.0.1
@@ -22,14 +24,13 @@ jobs:
           persist-credentials: false
       - name: Install uv
         uses: astral-sh/setup-uv@v10.3.2
-        with:
-          enable-cache: false
       - run: uv run tox -e docs
       - uses: actions/upload-pages-artifact@v5.0.0
         with:
           path: site
 
   deploy:
+    name: deploy docs
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     needs: build
     runs-on: ubuntu-latest
