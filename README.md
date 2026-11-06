@@ -14,6 +14,11 @@
 
 ## Known issues
 
+> [!NOTE]
+> We do not accept pull requests that directly edit the `src/janaf/data/*.txt` files.
+> 
+> If you find any data issues, please consider updating [`scripts/fix_data.py`](https://github.com/n-takumasa/py-janaf/blob/main/scripts/fix_data.py) instead.
+
 * Some tables have inconsistencies [#13](https://github.com/n-takumasa/py-janaf/issues/13)
 * A few rows break thermodynamic identities [#71](https://github.com/n-takumasa/py-janaf/issues/71)
 

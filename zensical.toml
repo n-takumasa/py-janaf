@@ -69,11 +69,14 @@ scheme = "slate"
 toggle.icon = "lucide/moon"
 toggle.name = "Switch to system preference"
 
-[project.markdown_extensions.pymdownx.highlight]
-auto_title = true
+[project.markdown_extensions]
+admonition = {}
+pymdownx.details = {}
+pymdownx.superfences = {}
+pymdownx.highlight = { auto_title = true }
+pymdownx.inlinehilite = {}
+pymdownx.quotes = { callouts = true }
 
-[project.markdown_extensions.pymdownx.superfences]
-[project.markdown_extensions.pymdownx.inlinehilite]
 [project.markdown_extensions.pymdownx.snippets]
 base_path = ["docs/", "."]
 check_paths = true
