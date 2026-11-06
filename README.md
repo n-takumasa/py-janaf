@@ -7,12 +7,15 @@
 
 * Search compounds
 * Parse a table as `polars.DataFrame`
-* Fix some data
-  * [Fix missing sign](https://github.com/n-takumasa/py-janaf/commit/7f56ce84bb65c90dd4ecd2efdca2d6f8fe1243b5)
-    * NOTE: Assuming the sign is consistent with the sign immediately following
-  * [Fix missing tab](https://github.com/n-takumasa/py-janaf/commit/196c788c792bb672f339d073a0d21c610fabff53)
-    * NOTE: Based on [PDF files](https://janaf.nist.gov/pdf/JANAF-FourthEd-1998-Carbon.pdf#page=83)
-  * [Ignore comment-like lines](https://github.com/n-takumasa/py-janaf/commit/d99b942fa8848eed8b8308cf9a50c1411a6f14bf)
+* [Fix some data](https://github.com/n-takumasa/py-janaf/blob/main/scripts/fix_data.py)
+    * Fix missing sign
+    * Fix missing tab
+    * Ignore comment-like lines
+
+## Known issues
+
+* Some tables have inconsistencies [#13](https://github.com/n-takumasa/py-janaf/issues/13)
+* A few rows break thermodynamic identities [#71](https://github.com/n-takumasa/py-janaf/issues/71)
 
 ## Usage
 
