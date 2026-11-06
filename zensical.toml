@@ -1,11 +1,12 @@
 [project]
+strict = true
 site_name = "py-janaf"
 site_url = "https://n-takumasa.github.io/py-janaf/"
 site_description = "Python wrapper for NIST-JANAF Thermochemical Tables"
 site_author = "Takumasa N."
 copyright = "Copyright &copy; 2026 Takumasa N."
 docs_dir = "docs"
-side_dir = "site"
+site_dir = "site"
 repo_url = "https://github.com/n-takumasa/py-janaf"
 extra_css = ["stylesheets/extra.css"]
 nav = [
@@ -68,11 +69,14 @@ scheme = "slate"
 toggle.icon = "lucide/moon"
 toggle.name = "Switch to system preference"
 
-[project.markdown_extensions.pymdownx.highlight]
-auto_title = true
+[project.markdown_extensions]
+admonition = {}
+pymdownx.details = {}
+pymdownx.superfences = {}
+pymdownx.highlight = { auto_title = true }
+pymdownx.inlinehilite = {}
+pymdownx.quotes = { callouts = true }
 
-[project.markdown_extensions.pymdownx.superfences]
-[project.markdown_extensions.pymdownx.inlinehilite]
 [project.markdown_extensions.pymdownx.snippets]
 base_path = ["docs/", "."]
 check_paths = true
@@ -82,10 +86,14 @@ inventories = ["https://docs.python.org/3/objects.inv"]
 paths = ["src"]
 
 [project.plugins.mkdocstrings.handlers.python.options]
+docstring_section_style = "list"
 docstring_style = "numpy"
 inherited_members = true
-show_source = true
-show_root_members_full_path = true
-group_by_category = false
-show_symbol_type_heading = true
 members_order = ["__all__", "source"]
+merge_init_into_class = true
+separate_signature = true
+show_root_members_full_path = true
+show_signature_annotations = true
+show_signature_type_parameters = true
+show_symbol_type_heading = true
+show_symbol_type_toc = true
